@@ -37,9 +37,9 @@ class TestLibrary(uni.TestCase):
     
     # Tests game::__str__() method 
     def test_strGame(self):
-        self.assertEqual(str(self.testGame1), "< Game1, 5, 40GB, $20 >", FAIL)
-        self.assertEqual(str(self.testGame2), "< , , ,  >", FAIL)
-        self.assertEqual(str(self.testGame3), "< N/A, N/A, N/A, N/A >", FAIL)
+        self.assertEqual(str(self.testGame1), "< Game1, 5, 40GB, $20 >\n", FAIL)
+        self.assertEqual(str(self.testGame2), "< , , ,  >\n", FAIL)
+        self.assertEqual(str(self.testGame3), "< N/A, N/A, N/A, N/A >\n", FAIL)
         
         
 if __name__ == "__main__":
