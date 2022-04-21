@@ -11,6 +11,10 @@ F = False
 def empty(x):
     return x is None
 
+# Clears terminal screen on Win, Mac, & Linux
+def clear():
+    os.system('cls||clear')
+
 ########## Classes ##########
 
 # Serves as a object representing a single game
@@ -22,13 +26,20 @@ class game:
         self.size = size
         self.price = price
         
-    # Returns true when the calling game object is a null entry (used to denote a failed get/search)
+    # Returns true when instance is all N/A
+    # TODO: Should I remove?
     def nullEntry(self):
         return self.title == "N/A"
     
-    # Allows the str() or print() method to be used directly on the game object
+    # Allows the str()/print() method to be used directly on the game instance
+    # TODO: TEST
     def __str__(self):
-        return "{}, {}, {}, {}".format(self.title, self.rating, self.size, self.price)
+        return "< {}, {}, {}, {} >".format(self.title, self.rating, self.size, self.price)
+    
+    # Parses CSV line (str); returns new game instance; stog -> String to Game (C++ convention)
+    @classmethod
+    def stog(cls, line):
+        return cls()
 
 # Serves as each node in Linked List; used for collisions in Hash table
 class Node:
@@ -45,7 +56,7 @@ class LinkedList:
     
     # Constructs Node, then appends it to list
     def emplace_back(self, data):
-        if self.head is None:
+        if empty(self.head):
             self.head = Node(data)
             return
         it = self.head
@@ -53,21 +64,22 @@ class LinkedList:
             it = it.next
         it.next = Node(data)
         
-    # FOR TESTING ONLY; prints list of nodes with STL datatypes ONLY (str, int, etc.)
-    def printL(self):
-        if self.head is None:
-            print("Empty List")
-            return
+    # Allows a LinkedList() object to be used in str()/print()
+    #TODO: TEST
+    def __str__(self):
+        if empty(self.head): return "Empty List"
         it = self.head
         s = ""
         while it:
-            s += str(it.data) + ("->None" if it.next is None else "->")
+            s += str(it.data) + ("->None" if empty(it.next) else "->")
             it = it.next
-        print(s)
+        return s
         
-    # Returns len(LL)
-    def len(self): 
+    # Allows the use of len() to return integer length of the Linked list, which is the number of nodes
+    # TODO: TEST
+    def __len__(self): 
         i = 0
+        if empty(self.head): return i
         it = self.head
         while it:
             i += 1
@@ -75,26 +87,25 @@ class LinkedList:
         return i
     
     # Removes specified Node
-    def __delitem__(self, data):
-        if self.head is None:
-            return 
-        elif self.len() == 1:
+    #TODO: DOESN'T HANDLE NON-EXISTANT DELETE REQUESTS
+    def __delitem__(self, data_):
+        if len(self) < 2: # This doesn't check if the specified item is correct
             self.head = None
             return 
-        elif self.head.data == data:
+        elif self.head.data == data_: ## TODO: OVERLOAD EQUALITY OPERATOR FOR GAME CLASS
             self.head = self.head.next
             return 
-        it = self.head
-        while it:
-            if it.next is None: 
-                return 
-            if it.next.data == data:
-                if it.next.next:
-                    it.next = it.next.next
-                else: 
-                    it.next = None
-                return 
-            it = it.next  
+        else:
+            it = self.head
+            while it:
+                if empty(it.next): return 
+                if it.next.data == data_:
+                    if it.next.next:
+                        it.next = it.next.next
+                    else: 
+                        it.next = None
+                    return 
+                it = it.next  
         
 
 # Serves as a Hash Table to be used within class library
@@ -105,38 +116,36 @@ class HashTable:
         self.size = size
         self.arr = [LinkedList() for _ in range(self.size)] 
         
-    # Generates hashed index based on the summation of ASCII values in key 
+    # Generates hashed index based on the summation of ASCII values in key; AKA Hash Function
     def hash(self, title):
         hsh = 0
         for c in title:
             hsh += ord(c)
         return hsh%self.size
     
-    # [] operator overload: HT[key] = game 
+    # [] operator overload: HT[key] = game (SETTER)
     # TODO: TEST
     def __setitem__(self, title, game_):
         hsh = self.hash(title)
-        if (self.arr[hsh].head.data):
+        if not empty(self.arr[hsh].head):
             self.arr[hsh].emplace_back(game_)
         else:
             self.arr[hsh].head.data = game_
         
-    # [] operator overload: HT[key] -return-> game 
+    # [] operator overload: HT[key] -return-> game (GETTER)
     # TODO: TEST
-    def __getitem__(self, title):
-        hsh = self.hash(title)
-        n = self.arr[hsh].len()
-        if (not n):
-            return game()
-        elif (n == 1): 
-            return self.arr[hsh].head.data
+    def __getitem__(self, title_):
+        n = len(self.arr[self.hash(title_)])
+        it = self.arr[self.hash(title_)].head
+        if not n: return None
+        elif n == 1 and it.data.title == title_: ############ TODO:  OVERLOAD EQUALITY OPERATOR!!!!!!!
+            return it.data
         else:
-            it = self.arr[hsh].head
             while it:
-                if (it.data.title == title):
+                if (it.data.title == title_):
                     return it.data
                 it = it.next
-            return game() # returns blank game if game not found
+            return None # returns None if game not found
             
     # del operator overload: del HT[key]; deletes value at index 
     # TODO: FIX & TEST
@@ -145,13 +154,11 @@ class HashTable:
 
 # Serves as the highest abstract data type (class), which contains the game database 
 class library:
+    numBooks = 0
+    
     def __init__(self, size=100):
         self.ht = HashTable(size)    
         
-########## Functions ##########
-
-# Clears terminal screen on Win, Mac, & Linux
-def clear():
-    os.system('cls||clear')
-    
+        library.numBooks += 1
+        
 ########## Main ##########
