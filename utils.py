@@ -3,6 +3,9 @@ import subprocess
 import pkg_resources
 from pkg_resources import DistributionNotFound, VersionConflict
 
+# Used as custom exception when a non-existent item is accessed by dev
+class DuplicateEntry(Exception): pass
+
 def should_install_requirement(requirement):
     should_install = False
     try:

@@ -1,5 +1,7 @@
 ########## Libraries ##########
-import os 
+import os
+from utils import DuplicateEntry
+from xml.dom import InvalidAccessErr
 
 ########## Global Constants ##########
 T = True
@@ -14,7 +16,7 @@ def clear():
 ########## Classes ##########
 
 # Serves as a object representing a single game
-class game:
+class Game:
     # Dunder Constructor
     def __init__(self, title="N/A", rating="N/A", size="N/A", price="N/A"):
         self.title = title
@@ -23,12 +25,10 @@ class game:
         self.price = price
     
     # Dunder str(); Formats game instance to str
-    # TODO: TEST
     def __str__(self):
-        return "game( {}, {}, {}, {} )\n".format(self.title, self.rating, self.size, self.price)
+        return f"game({self.title},{self.rating},{self.size},{self.price})"
     
-    # Class Method (secondary constructor); returns new game instance from single CSV line; stog -> String to Game (C++ convention)
-    # TODO: TEST SPLAT OPERATOR 
+    # Class Method (secondary constructor); returns new game instance from CSV format line; stog -> String to Game (C++ convention)
     @classmethod
     def stog(cls, line):
         return cls(*line.strip().split(","))
@@ -39,6 +39,9 @@ class Node:
     def __init__(self, data=None, next=None):
         self.data = data
         self.next = next
+        
+    def getTitle(self):
+        return self.data.title
 
 # LL used to manage collisions using chaining within hash table
 # TODO: ADD __contains__(self, item), __iter__(self), __next__(self); 
@@ -47,20 +50,7 @@ class LinkedList:
     def __init__(self):
         self.head = None
         
-    # Dunder str(); Formats LL to str for print
-    # TODO: TEST
-    def __str__(self):
-        s = ""
-        it = self.head
-        if not self.head: 
-            return "Empty List"
-        while it:
-            s += str(it.data) + ("->None" if not it.next else "->")
-            it = it.next
-        return s
-        
     # Dunder len(); returns number of non-None nodes in LL
-    # TODO: TEST
     def __len__(self): 
         i = 0
         it = self.head
@@ -69,39 +59,50 @@ class LinkedList:
             it = it.next
         return i
     
-    # Dunder del; Removes specified Node; del LL[title]
-    #TODO: DOESN'T HANDLE NON-EXISTANT DELETE REQUESTS
+    # Dunder str(); Formats LL to str for print
+    def __str__(self):
+        s = ""
+        it = self.head
+        if not len(self): 
+            return "Empty List"
+        while it:
+            s += str(it.data) + ("->None" if not it.next else "->")
+            it = it.next
+        return s
+    
+    # Dunder del; Removes specified Node; del LL[title]; throws InvalidAccessErr if non-existent
     def __delitem__(self, title):
-        if len(self) < 2: # This doesn't check if the specified item is correct
-            self.head = None
-            return 
-        elif self.head.data.title == title: ## TODO: OVERLOAD EQUALITY OPERATOR FOR GAME CLASS
+        if not len(self): # This doesn't check if the specified item is correct
+            raise InvalidAccessErr
+        elif self.head.getTitle() == title:
             self.head = self.head.next
             return 
         else:
             it = self.head
             while it:
-                if not it.next: return 
-                if it.next.data.title == title:
+                if it.next is None: 
+                    raise InvalidAccessErr
+                if it.next.getTitle() == title:
                     if it.next.next:
                         it.next = it.next.next
                     else: 
                         it.next = None
                     return 
-                it = it.next  
-        
+                it = it.next
+
     # Constructs Node, then appends it to back of list
-    def emplace_back(self, data):
-        if not self.head:
-            self.head = Node(data)
+    def emplace_back(self, game_):
+        if not len(self):
+            self.head = Node(game_)
             return
         it = self.head
         while it.next: 
+            if game_.title in ([it.getTitle(), it.next.getTitle()] if it.next else [it.getTitle()]):
+                raise DuplicateEntry
             it = it.next
-        it.next = Node(data)
+        it.next = Node(game_)
 
 # Serves as a Hash Table to be used within class library
-# TODO: TEST
 class HashTable:
     # Dunder Constructor
     def __init__(self, size=100):
@@ -126,24 +127,42 @@ class HashTable:
     def __getitem__(self, title_):
         it = self.arr[self.hash(title_)].head
         while it:
-            if it.data.title == title_: ############ TODO:  OVERLOAD EQUALITY OPERATOR!!!!!!!
+            if it.getTitle() == title_: 
                 return it.data
             it = it.next
-        return None # returns None if game not found
+        raise InvalidAccessErr
             
     # Dunder del: del HT[key]; deletes game at index 
-    # TODO: FIX & TEST
+    # TODO: CHECK FOR CHAINED INVALIDACCESSERR THROWS IN TESTING
     def __delitem__(self, title_):
         del self.arr[self.hash(title_)][title_] # equivalent to del LL[title]
+        
+    def __str__(self):
+        table = ""
+        for ll in self.arr:
+            table += str(ll) + "\n"
+        return table
+            
+    def __len__(self): 
+        i = 0
+        for ll in self.arr:
+            i += len(ll)
+        return i
+        
+    
 
 # Serves as the highest abstract data type (class), which contains the game database 
-class library:
+class Library:
     
-    numBooks = 0
+    numGames = 0
     
     def __init__(self, size=100):
-        self.ht = HashTable(size)    
+        self.dataBase = HashTable(size)   
+        self.printable = [] 
         
-        library.numBooks += 1
+        Library.numGames += 1
+        
+    def addGame():
+        pass
         
 ########## Main ##########
