@@ -4,7 +4,7 @@ This repository holds all versions of our final project for ENGR-102
 Library.py:
   - Contains all data structures necessary for our program to store & retreieve data fast. 
   - Contains the Library class, which will be used to control every operation within the program.
-  - You can refernece this file when writing your code to see which methods are available to you.
+  - You can reference this file when writing your code to see which methods are available to you.
 
 test_*.py:
   - Any file that starts with "test_" is a unittest file, which is a unit tester for our program to ensure everything works properly with a click of the button
