@@ -10,4 +10,6 @@ test_*.py:
   - Any file that starts with "test_" is a unittest file, which is a unit tester for our program to ensure everything works properly with a click of the button
 
 utils.py:
-  - This is a package manager, which will automatically install any missing libraries from your computer. You must have PIP installed for this to work
+  - Contains a package manager, which will automatically install any missing libraries from your computer. 
+    - You must have PIP installed for this to work
+  - Contains custom exceptions to be thrown within try:except:finally branches.
