@@ -83,7 +83,7 @@ class TestLibrary(uni.TestCase):
         
         self.testLLstr1.emplace_back(self.testStrGame1)
         del self.testLLstr1[self.testStrGame1.title]
-        self.assertEqual(len(self.testLLstr1), 0, FAIL)
+        self.assertEqual(len(self.testLLstr1), 0, FAIL) ######### 0
         self.assertEqual(str(self.testLLstr1), "Empty List", FAIL)
         
         self.testLLstr1.emplace_back(self.testStrGame2)
