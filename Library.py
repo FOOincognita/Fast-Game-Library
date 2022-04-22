@@ -42,9 +42,12 @@ class Node:
         
     def getTitle(self):
         return self.data.title
+    
+    def __str__(self):
+        return str(self.data)
 
 # LL used to manage collisions using chaining within hash table
-# TODO: ADD __contains__(self, item), __iter__(self), __next__(self); 
+# TODO: ADD __contains__(self, item)
 class LinkedList:
     # Dunder Constructor
     def __init__(self):
@@ -89,6 +92,13 @@ class LinkedList:
                         it.next = None
                     return 
                 it = it.next
+    
+    # Dunder iter(); Allows LLs to be iterable (can be used in for loops)
+    def __iter__(self):
+        curr = self.head
+        while curr:
+            yield curr
+            curr = curr.next
 
     # Constructs Node, then appends it to back of list
     def emplace_back(self, game_):
@@ -98,7 +108,7 @@ class LinkedList:
         it = self.head
         while it.next: 
             if game_.title in ([it.getTitle(), it.next.getTitle()] if it.next else [it.getTitle()]):
-                raise DuplicateEntry
+                raise DuplicateEntry # ^^^ REPLACE WITH game_.title in LL
             it = it.next
         it.next = Node(game_)
 
@@ -137,12 +147,14 @@ class HashTable:
     def __delitem__(self, title_):
         del self.arr[self.hash(title_)][title_] # equivalent to del LL[title]
         
+    # Dunder str(); Formats HashTable as string
     def __str__(self):
         table = ""
         for ll in self.arr:
             table += str(ll) + "\n"
         return table
             
+    # Dunder len(); Returns int number of games in Hash Table
     def __len__(self): 
         i = 0
         for ll in self.arr:

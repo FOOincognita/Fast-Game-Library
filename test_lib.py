@@ -112,6 +112,21 @@ class TestLibrary(uni.TestCase):
         
         
         
+    # Tests LinkedList::__iter__() dunder method 
+    def test_LLIter(self):
+        testStr = ""
+        self.testLLstr1.emplace_back(self.testStrGame1)
+        self.testLLstr1.emplace_back(self.testStrGame2)
+        self.testLLstr1.emplace_back(self.testStrGame3)
+        
+        for n in self.testLLstr1:
+            testStr += str(n)
+            
+        self.assertEqual(testStr, "game(Game1,5,40GB,$20)game(,,,)game(N/A,N/A,N/A,N/A)", FAIL)
+        
+        
+        
+        
     # Tests HashTable::__delitem__() dunder method 
     def test_HTDelItem(self):
         pass
