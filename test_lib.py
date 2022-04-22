@@ -1,8 +1,7 @@
-from utils import DuplicateEntry
-from xml.dom import InvalidAccessErr
-from kiwisolver import DuplicateEditVariable
 import utils
 import unittest as uni
+from utils import DuplicateEntry
+from xml.dom import InvalidAccessErr
 from Library import Game, Node, LinkedList, HashTable, Library
 from colorama import init, Fore as fg, Back as bg, Style as st
     # Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
@@ -110,7 +109,20 @@ class TestLibrary(uni.TestCase):
         except(InvalidAccessErr):
             threw2 = True
         self.assertTrue(threw2, FAIL)
-            
+        
+        
+        
+    # Tests HashTable::__delitem__() dunder method 
+    def test_HTDelItem(self):
+        pass
+    
+    # Tests HashTable::__delitem__() dunder method 
+    def test_HTDelItem(self):
+        pass
+    
+    # Tests HashTable::__delitem__() dunder method 
+    def test_HTDelItem(self):
+        pass
         
         
         

@@ -72,7 +72,7 @@ class LinkedList:
     
     # Dunder del; Removes specified Node; del LL[title]; throws InvalidAccessErr if non-existent
     def __delitem__(self, title):
-        if not len(self): # This doesn't check if the specified item is correct
+        if not len(self): 
             raise InvalidAccessErr
         elif self.head.getTitle() == title:
             self.head = self.head.next
@@ -120,7 +120,7 @@ class HashTable:
     # TODO: TEST
     def __setitem__(self, title, game_):
         self.arr[self.hash(title)].emplace_back(game_)
-        #TODO: CHECK FOR DUPLICATES
+        #TODO: EXCEPTION PASSTHROUGH WITHIN NESTED CALL?
         
     # Dunder get: HT[key] -return-> game (GETTER)
     # TODO: TEST
@@ -159,10 +159,29 @@ class Library:
     def __init__(self, size=100):
         self.dataBase = HashTable(size)   
         self.printable = [] 
+        self.MEMDIR = "LibMem.txt"
         
-        Library.numGames += 1
-        
-    def addGame():
+    def loadMemory(self):
         pass
+    
+    def writeMemory(self):
+        pass
+        
+    def addGame(self, game_):
+        pass
+    
+    def __str__(self):
+        pass
+    
+    def __delitem__(self, title_):
+        pass
+
+    def promptMainMenu(self):
+        pass
+    
+    def search():
+        pass
+    
+    
         
 ########## Main ##########
