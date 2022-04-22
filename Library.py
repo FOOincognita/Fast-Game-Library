@@ -130,6 +130,7 @@ class HashTable:
     # Dunder set: HT[key] = game (SETTER)
     # TODO: TEST
     def __setitem__(self, title, game_):
+        
         self.arr[self.hash(title)].emplace_back(game_)
         #TODO: EXCEPTION PASSTHROUGH WITHIN NESTED CALL?
         

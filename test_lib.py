@@ -30,7 +30,7 @@ class TestLibrary(uni.TestCase):
         self.testLLstr2 = LinkedList()
         
         # test_HT object
-        self.testHT = HashTable()
+        self.testHT = HashTable(10)
 
 
     
@@ -127,17 +127,32 @@ class TestLibrary(uni.TestCase):
         
         
         
-    # Tests HashTable::__delitem__() dunder method 
-    def test_HTDelItem(self):
-        pass
+    # Tests HashTable::hash() method 
+    def test_HThash(self):
+        hsh = self.testHT.hash("abcDtF")
+        hshtest = self.testHT.hash("abcDtF")
+        hshnetest = self.testHT.hash("abaesfaetF")
+        self.assertTrue(hshtest == hsh, FAIL)
+        self.assertTrue(hshnetest != hsh, FAIL)
+        hshtest2 = self.testHT.hash("abcDtF")
+        self.assertTrue(hshtest2 == hsh, FAIL)
+            
     
-    # Tests HashTable::__delitem__() dunder method 
-    def test_HTDelItem(self):
-        pass
+    # Tests HashTable::__str__() dunder method with empty table
+    def test_HTStr(self):
+        testStr = ""
+        
+        for i in range(10):
+            testStr += "Empty List\n"
+        self.assertEqual(str(self.testHT), testStr, FAIL)
+        
     
-    # Tests HashTable::__delitem__() dunder method 
-    def test_HTDelItem(self):
-        pass
+    # Tests HashTable::__setitem__() dunder method 
+    def test_HTSetItem(self):
+        testLst = []
+        self.testHT[self.testStrGame1.title] = self.testStrGame1
+        
+        
         
         
         
