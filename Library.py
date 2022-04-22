@@ -33,6 +33,8 @@ class Game:
     def stog(cls, line):
         return cls(*line.strip().split(","))
 
+
+
 # Serves as each node in Linked List
 class Node:
     # Dunder Constructor
@@ -53,24 +55,27 @@ class LinkedList:
     def __init__(self):
         self.head = None
         
+    # Dunder iter(); Allows LLs to be iterable in for loops
+    def __iter__(self):
+        curr = self.head
+        while curr:
+            yield curr
+            curr = curr.next
+        
     # Dunder len(); returns number of non-None nodes in LL
     def __len__(self): 
         i = 0
-        it = self.head
-        while it:
+        for node in self:
             i += 1
-            it = it.next
         return i
     
     # Dunder str(); Formats LL to str for print
     def __str__(self):
         s = ""
-        it = self.head
         if not len(self): 
             return "Empty List"
-        while it:
-            s += str(it.data) + ("->None" if not it.next else "->")
-            it = it.next
+        for node in self:
+            s += str(node.data) + ("->None" if not node.next else "->")
         return s
     
     # Dunder del; Removes specified Node; del LL[title]; throws InvalidAccessErr if non-existent
@@ -81,36 +86,25 @@ class LinkedList:
             self.head = self.head.next
             return 
         else:
-            it = self.head
-            while it:
-                if it.next is None: 
+            for node in self:
+                if node.next is None: 
                     raise InvalidAccessErr
-                if it.next.getTitle() == title:
-                    if it.next.next:
-                        it.next = it.next.next
+                if node.next.getTitle() == title:
+                    if node.next.next:
+                        node.next = node.next.next
                     else: 
-                        it.next = None
+                        node.next = None
                     return 
-                it = it.next
-    
-    # Dunder iter(); Allows LLs to be iterable (can be used in for loops)
-    def __iter__(self):
-        curr = self.head
-        while curr:
-            yield curr
-            curr = curr.next
 
     # Constructs Node, then appends it to back of list
     def emplace_back(self, game_):
         if not len(self):
             self.head = Node(game_)
             return
-        it = self.head
-        while it.next: 
-            if game_.title in ([it.getTitle(), it.next.getTitle()] if it.next else [it.getTitle()]):
+        for node in self: 
+            if game_.title in ([node.getTitle(), node.next.getTitle()] if node.next else [node.getTitle()]):
                 raise DuplicateEntry # ^^^ REPLACE WITH game_.title in LL
-            it = it.next
-        it.next = Node(game_)
+        node.next = Node(game_)
 
 # Serves as a Hash Table to be used within class library
 class HashTable:
