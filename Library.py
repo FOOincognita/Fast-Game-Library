@@ -49,7 +49,6 @@ class Node:
         return str(self.data)
 
 # LL used to manage collisions using chaining within hash table
-# TODO: ADD __contains__(self, item)
 class LinkedList:
     # Dunder Constructor
     def __init__(self):
@@ -61,6 +60,12 @@ class LinkedList:
         while curr:
             yield curr
             curr = curr.next
+            
+    def __contains__(self, title):
+        for node in self:
+            if node.getTitle() == title:
+                return True
+        return False
         
     # Dunder len(); returns number of non-None nodes in LL
     def __len__(self): 
@@ -80,7 +85,7 @@ class LinkedList:
     
     # Dunder del; Removes specified Node; del LL[title]; throws InvalidAccessErr if non-existent
     def __delitem__(self, title):
-        if not len(self): 
+        if not len(self) or title not in self: 
             raise InvalidAccessErr
         elif self.head.getTitle() == title:
             self.head = self.head.next
@@ -101,10 +106,12 @@ class LinkedList:
         if not len(self):
             self.head = Node(game_)
             return
+        if game_.title in self:
+            raise DuplicateEntry
         for node in self: 
-            if game_.title in ([node.getTitle(), node.next.getTitle()] if node.next else [node.getTitle()]):
-                raise DuplicateEntry # ^^^ REPLACE WITH game_.title in LL
-        node.next = Node(game_)
+            if node.next is None:
+                node.next = Node(game_)
+                return
 
 # Serves as a Hash Table to be used within class library
 class HashTable:
