@@ -1,6 +1,6 @@
 import utils
 import unittest as uni
-from utils import DuplicateEntry
+from utils import DuplicateEntry, EmptyEntry
 from xml.dom import InvalidAccessErr
 from Library import Game, Node, LinkedList, HashTable, Library
 from colorama import init, Fore as fg, Back as bg, Style as st
@@ -36,13 +36,13 @@ class TestLibrary(uni.TestCase):
     
     # Tests Game::__str__() dunder method 
     def test_strGame(self):
-        self.assertEqual(str(self.testStrGame1), "game(Game1,5,40GB,$20)", FAIL)
-        self.assertEqual(str(self.testStrGame2), "game(,,,)", FAIL)
-        self.assertEqual(str(self.testStrGame3), "game(N/A,N/A,N/A,N/A)", FAIL)
+        self.assertEqual(str(self.testStrGame1), "[Game1,5,40GB,$20]", FAIL)
+        self.assertEqual(str(self.testStrGame2), "[,,,]", FAIL)
+        self.assertEqual(str(self.testStrGame3), "[N/A,N/A,N/A,N/A]", FAIL)
         
     # Tests Game::stog() class method 
     def test_stogGame(self):
-        self.assertEqual(str(self.testStogGame), "game(GameStog,10,80GB,$50)", FAIL)
+        self.assertEqual(str(self.testStogGame), "[GameStog,10,80GB,$50]", FAIL)
         
         
         
@@ -55,11 +55,11 @@ class TestLibrary(uni.TestCase):
     def test_LLEmplace_Back(self):
         threw1 = False
         self.testLLstr1.emplace_back(self.testStrGame1)
-        self.assertEqual(str(self.testLLstr1), "game(Game1,5,40GB,$20)->None", FAIL)
+        self.assertEqual(str(self.testLLstr1), "[Game1,5,40GB,$20]->None", FAIL)
         self.testLLstr1.emplace_back(self.testStrGame2)
-        self.assertEqual(str(self.testLLstr1), "game(Game1,5,40GB,$20)->game(,,,)->None", FAIL)
+        self.assertEqual(str(self.testLLstr1), "[Game1,5,40GB,$20]->[,,,]->None", FAIL)
         self.testLLstr1.emplace_back(self.testStrGame3)
-        self.assertEqual(str(self.testLLstr1), "game(Game1,5,40GB,$20)->game(,,,)->game(N/A,N/A,N/A,N/A)->None", FAIL)
+        self.assertEqual(str(self.testLLstr1), "[Game1,5,40GB,$20]->[,,,]->[N/A,N/A,N/A,N/A]->None", FAIL)
         
         try:
             self.testLLstr1.emplace_back(self.testStrGame1)
@@ -90,7 +90,7 @@ class TestLibrary(uni.TestCase):
         self.testLLstr1.emplace_back(self.testStrGame3)
         del self.testLLstr1[self.testStrGame2.title]
         self.assertEqual(len(self.testLLstr1), 1, FAIL)
-        self.assertEqual(str(self.testLLstr1), "game(N/A,N/A,N/A,N/A)->None", FAIL)
+        self.assertEqual(str(self.testLLstr1), "[N/A,N/A,N/A,N/A]->None", FAIL)
         
         del self.testLLstr1[self.testStrGame3.title]
         self.assertEqual(len(self.testLLstr1), 0, FAIL)
@@ -122,7 +122,7 @@ class TestLibrary(uni.TestCase):
         for n in self.testLLstr1:
             testStr += str(n)
             
-        self.assertEqual(testStr, "game(Game1,5,40GB,$20)game(,,,)game(N/A,N/A,N/A,N/A)", FAIL)
+        self.assertEqual(testStr, "[Game1,5,40GB,$20][,,,][N/A,N/A,N/A,N/A]", FAIL)
         
         
         
@@ -147,13 +147,28 @@ class TestLibrary(uni.TestCase):
         self.assertEqual(str(self.testHT), testStr, FAIL)
         
     
-    # Tests HashTable::__setitem__() dunder method 
+    # Tests HashTable::__set/getitem__() dunder method 
     def test_HTSetItem(self):
-        testLst = []
+        found1, except1, except2 = False, False, False
         self.testHT[self.testStrGame1.title] = self.testStrGame1
+        for LL in self.testHT.arr:
+            for node in LL:
+                if "[Game1,5,40GB,$20]" == str(node):
+                    found1 = True
+        self.assertTrue(found1, FAIL)
+        
+        try:
+            self.testHT[self.testStrGame3.title] = self.testStrGame3
+            self.testHT[self.testStrGame3.title] = self.testStrGame3
+        except(EmptyEntry):
+            except1 = True
+        except(DuplicateEntry):
+            except2 = True
+        self.assertTrue(except1, FAIL)
+        self.assertTrue(except2, FAIL)
         
         
-        
+        "[Game1,5,40GB,$20]->[,,,]->[N/A,N/A,N/A,N/A]->None"
         
         
         

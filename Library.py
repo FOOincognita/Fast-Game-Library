@@ -1,7 +1,15 @@
 ########## Libraries ##########
 import os
-from utils import DuplicateEntry
+from utils import DuplicateEntry, EmptyEntry
 from xml.dom import InvalidAccessErr
+from colorama import init, Fore as fg, Back as bg, Style as st
+init(autoreset=True)
+
+GAMECOLOR = st.BRIGHT + bg.BLACK + fg.GREEN
+
+NULLCOLOR = st.BRIGHT + bg.BLACK + fg.BLUE
+
+EMPTYCOLOR = st.BRIGHT + bg.BLACK + fg.RED
 
 ########## Global Constants ##########
 T = True
@@ -26,7 +34,7 @@ class Game:
     
     # Dunder str(); Formats game instance to str
     def __str__(self):
-        return f"game({self.title},{self.rating},{self.size},{self.price})"
+        return f"[{self.title},{self.rating},{self.size},{self.price}]"
     
     # Class Method (secondary constructor); returns new game instance from CSV format line; stog -> String to Game (C++ convention)
     @classmethod
@@ -78,9 +86,9 @@ class LinkedList:
     def __str__(self):
         s = ""
         if not len(self): 
-            return "Empty List"
+            return EMPTYCOLOR + "Empty List" + st.RESET_ALL
         for node in self:
-            s += str(node.data) + ("->None" if not node.next else "->")
+            s += GAMECOLOR + str(node.data) + st.RESET_ALL + (chr(10236) + " " + NULLCOLOR + "[None]" + st.RESET_ALL if not node.next else chr(10236) + " ") 
         return s
     
     # Dunder del; Removes specified Node; del LL[title]; throws InvalidAccessErr if non-existent
@@ -127,27 +135,25 @@ class HashTable:
             hsh += ord(c)
         return hsh%self.SIZE
     
-    # Dunder set: HT[key] = game (SETTER)
-    # TODO: TEST
-    def __setitem__(self, title, game_):
+    # Dunder set: HT[key] = Game; throws EmptyEntry & DuplicateEntry
+    def __setitem__(self, title_, game_):
+        if not len(title_) or title_ == "N/A":
+            raise EmptyEntry
+        if title_ in self.arr[self.hash(title_)]:
+            raise DuplicateEntry
+        else:
+            self.arr[self.hash(title_)].emplace_back(game_)
         
-        self.arr[self.hash(title)].emplace_back(game_)
-        #TODO: EXCEPTION PASSTHROUGH WITHIN NESTED CALL?
-        
-    # Dunder get: HT[key] -return-> game (GETTER)
-    # TODO: TEST
+    # Dunder get: HT[key] -return-> Game; Throws InvalidAccessErr
     def __getitem__(self, title_):
-        it = self.arr[self.hash(title_)].head
-        while it:
-            if it.getTitle() == title_: 
-                return it.data
-            it = it.next
+        for node in self.arr[self.hash(title_)]:
+            if node.getTitle() == title_: 
+                return node
         raise InvalidAccessErr
             
-    # Dunder del: del HT[key]; deletes game at index 
-    # TODO: CHECK FOR CHAINED INVALIDACCESSERR THROWS IN TESTING
+    # Dunder del: del HT[key]; deletes game with matching title; Throws InvalidAccessErr 
     def __delitem__(self, title_):
-        del self.arr[self.hash(title_)][title_] # equivalent to del LL[title]
+        del self.arr[self.hash(title_)][title_] 
         
     # Dunder str(); Formats HashTable as string
     def __str__(self):
@@ -175,27 +181,38 @@ class Library:
         self.printable = [] 
         self.MEMDIR = "LibMem.txt"
         
+    # Loads in "LibMem.txt" at program start
     def loadMemory(self):
         pass
     
+    # Writes all data to "LibMem.txt" at exit
     def writeMemory(self):
         pass
         
+    # [TEMPORARY METHOD]: Adds game to library
     def addGame(self, game_):
         pass
     
+    # Dunder str(); Formats Library's HashTable (dataBase) to printable form
     def __str__(self):
         pass
     
+    # Dunder del; Deletes a Game instance given a Title
     def __delitem__(self, title_):
         pass
 
+    # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
     def promptMainMenu(self):
         pass
     
-    def search():
+    # Saves & Exits saftely (writes to LibMem)
+    def saveAndExit():
         pass
     
     
         
 ########## Main ##########
+if __name__ == "__main__":
+    pass
+    
+    
