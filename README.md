@@ -16,3 +16,6 @@ utils.py:
 
 LibMem.txt:
   - This file will contain all game entries & will server as persistent memory for our program (e.i. after shutting the program off, we will be able to reboot it with all the exact same data from before, mimicing a harddrive). Our program will read that file on boot, & write to it on shutdown. The file will be in lexicographical order by title.
+
+GameLib.py:
+  - Servers as "main"; user will start program from this file. This file is the "front-end."
