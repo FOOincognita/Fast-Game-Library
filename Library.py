@@ -297,7 +297,7 @@ class HashTable:
 # Serves as the highest abstract data type (class), which contains the game database 
 class Library:
     
-    def __init__(self, size=50, mem="LibMem.txt"):
+    def __init__(self, size=50, mem="LibMem.csv"):
         self.dataBase = HashTable(size)   
         self.printable = [] # Stroes titles of Games in lexicographical order for printing
         self.MEMDIR = mem
