@@ -33,7 +33,11 @@ def install_packages(requirement_list):
 
     except Exception as e:
         print(e)
-        print(st.BRIGHT + fg.RED + "[ ERROR ]\nPLEASE INSTALL PIP\n" + st.RESET_ALL)
+        print(st.BRIGHT + fg.RED + "[ ERROR ] PLEASE INSTALL PIP\n" + st.RESET_ALL)
         
 # Add required packages here
 install_packages(['colorama'])
+
+if python_version().split('.')[1] != "10":
+    print(st.BRIGHT + fg.RED + "[ ERROR ] PLEASE INSTALL PYTHON 3.10 OR ABOVE\n" + st.RESET_ALL)
+    print(st.BRIGHT + fg.YELLOW + "Your current version: " + str(python_version()) + "\n" + st.RESET_ALL)
