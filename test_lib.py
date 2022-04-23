@@ -168,9 +168,6 @@ class TestLibrary(uni.TestCase):
         self.assertTrue(except2, FAIL)
         
         
-        "[Game1,5,40GB,$20]->[,,,]->[N/A,N/A,N/A,N/A]->None"
-        
-        
         
 if __name__ == "__main__":
     uni.main(verbosity=2)

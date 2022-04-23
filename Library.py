@@ -181,6 +181,8 @@ class Library:
         self.printable = [] 
         self.MEMDIR = "LibMem.txt"
         
+        self.loadMemory()
+        
     # Loads in "LibMem.txt" at program start
     def loadMemory(self):
         pass
