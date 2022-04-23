@@ -1,7 +1,8 @@
 ########## Libraries ##########
 import os
+import csv
+from xml.dom import InvalidAccessErr, InvalidCharacterErr
 from utils import DuplicateEntry, EmptyEntry
-from xml.dom import InvalidAccessErr
 from colorama import init, Fore as fg, Back as bg, Style as st
 init(autoreset=True)
 
@@ -10,6 +11,7 @@ NULLCOLOR = st.BRIGHT + bg.BLACK + fg.BLUE
 EMPTYCOLOR = st.BRIGHT + bg.BLACK + fg.RED
 ARROW = chr(10236) + " "
 
+sinp = lambda x: str(input(x))
 gmestr = lambda x:  GAMECOLOR + str(x) + st.RESET_ALL
 nullstr = lambda x: ARROW + NULLCOLOR + str(x) + st.RESET_ALL
 
@@ -43,9 +45,9 @@ class Game:
         stog(cls, line): Secondary Constructor  
             Args:
                 cls: class (automatically passed in)
-                line (str): A str holding a CSV line from a file
+                line (list): A list parsed by the imported CSV library
             Usage:
-                Game1.stog(str)
+                Game1.stog(list)
             Returns:
                 Game: instance initialized with data from CSV line
     """
@@ -60,7 +62,7 @@ class Game:
     
     @classmethod
     def stog(cls, line):
-        return cls(*line.strip().split(","))
+        return cls(*line)
 
 class Node:
     """
@@ -203,7 +205,7 @@ class HashTable:
     Hash Table which contains all Games in Library. Uses chaining to handle collisions
     
     Attributes:
-        SIZE (int, optional): Number of linked Lists within arr. Defaults to 100
+        SIZE (int, optional): Number of linked Lists within arr. Defaults to 50
         arr (list): list containing LinkedLists
         
     Instance Methods:
@@ -253,7 +255,7 @@ class HashTable:
             Returns:
                 int: Number of Games in HashTable
     """
-    def __init__(self, size=100):
+    def __init__(self, size=50):
         self.SIZE = size
         self.arr = [LinkedList() for _ in range(self.SIZE)] 
         
@@ -295,25 +297,48 @@ class HashTable:
 # Serves as the highest abstract data type (class), which contains the game database 
 class Library:
     
-    numGames = 0
-    
-    def __init__(self, size=100):
+    def __init__(self, size=50, mem="LibMem.txt"):
         self.dataBase = HashTable(size)   
-        self.printable = [] 
-        self.MEMDIR = "LibMem.txt"
+        self.printable = [] # Stroes titles of Games in lexicographical order for printing
+        self.MEMDIR = mem
         
-        self.loadMemory()
+        self.loadMemory(self.MEMDIR)
         
-    # Loads in "LibMem.txt" at program start
-    def loadMemory(self):
+    # Returns Game data by title
+    def search(self, title_):
         pass
     
-    # Writes all data to "LibMem.txt" at exit
+    # Returns Game data by title
+    def reset(self):
+        pass
+    
+    # Returns Game data by title
+    def search(self, title_):
+        pass
+        
+    # Loads in file named in MEMDIR (str) at program start
+    def loadMemory(self, dir):
+        pass
+    
+    # Writes newly added game to MEMDIR file 
     def writeMemory(self):
         pass
         
-    # [TEMPORARY METHOD]: Adds game to library
+    # imports games from a user-specified CSV
+    def importGames(self, fileName):
+        pass
+    
+    # Adds game to library
     def addGame(self, game_):
+        pass
+    
+    # Deletes a Game instance given a Title
+    def delGame(self, title_):
+        # 1-liner: delete a game from database the same way you'd delete an element from dictionary
+        pass
+    
+    # Returns Game data by title
+    def printLib(self):
         pass
     
     # Dunder str(); Formats Library's HashTable (dataBase) to printable form
@@ -321,20 +346,31 @@ class Library:
         # 1-liner: return dataBase as a string
         pass
     
-    # Dunder del; Deletes a Game instance given a Title
-    def __delitem__(self, title_):
-        # 1-liner: delete a game from database the same way you'd delete an element from dictionary
-        pass
+    # Prompts user to make a selection from main menu, directs user accordingly 
+    @staticmethod
+    def userSel():
+        sel = sinp("Make a Selection: ")
+        if sel.isdigit() and 1 <= int(sel) <= 7:
+            return int(sel)
+        else:
+            raise InvalidCharacterErr
 
     # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
-    def promptMainMenu(self):
-        pass
+    @staticmethod
+    def promptMainMenu():
+        print("########## Main Menu ##########")
+        print("1) Search")
+        print("2) Add Game")
+        print("3) Delete Game")
+        print("4) Print Library")
+        print("5) Reset Library")
+        print("6) Import Library")
+        print("7) Save & Exit Program")
+        print("###############################")
     
-    # Saves & Exits saftely (writes to LibMem)
-    def saveAndExit():
-        pass
-    
-    
+    # Saves & Exits saftely (writes any unsaved added games)
+    def saveAndExit(self):
+        exit() ########## TEMP
         
 ########## Main ##########
 if __name__ == "__main__":

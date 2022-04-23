@@ -1,7 +1,9 @@
 import sys
 import subprocess
 import pkg_resources
+from platform import python_version
 from pkg_resources import DistributionNotFound, VersionConflict
+from colorama import init, Fore as fg, Back as bg, Style as st
 
 # Used as custom exception when a non-existent item is accessed by dev
 class DuplicateEntry(Exception): pass
@@ -31,6 +33,7 @@ def install_packages(requirement_list):
 
     except Exception as e:
         print(e)
+        print(st.BRIGHT + fg.RED + "[ ERROR ]\nPLEASE INSTALL PIP\n" + st.RESET_ALL)
         
 # Add required packages here
 install_packages(['colorama'])
