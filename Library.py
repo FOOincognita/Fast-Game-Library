@@ -301,7 +301,10 @@ class HashTable:
         for ll in self.arr:
             i += len(ll)
         return i
-        
+    
+    
+###################################################################### LIBRARY CLASS BELOW ###################################################################### 
+    
 # Serves as the highest abstract data type (class), which contains the game database 
 class Library:
     
