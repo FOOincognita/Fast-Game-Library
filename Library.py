@@ -353,7 +353,7 @@ class Library:
             Searching:
                 Use a try-except-else to handle InvalidAccessErr exceptions when game not found (see HashTable class docstring)
                     NOTE: Do NOT just check for 'Exception', you must ONLY check for InvalidAccessErr
-                If InvalidAccessErr is raised, Print "[Error]: Game not Found", then sleep(3), then loop back to (*)
+                If InvalidAccessErr is raised, Print "\n[Error]: Game not Found\n", then sleep(3), then loop back to (*)
                 If game with same title is found:
                     - Print formatted contents of the found Game as shown below
                         NOTE: repr(foundGame) will return a string formatted just like a csv of the Game returned by search
@@ -465,9 +465,9 @@ class Library:
                 - Do NOT check for 'Exception'; you must only check for DuplicateEntry exceptions
             Try to add Game to self.dataBase (HashTable) using title_ & the Game instance returned by Game.stog()
                 - Look in the HashTable class Docstring to see how to add games to self.dataBase (HashTable's __setitem__ will be useful)
-                - Print "Game successfully added" if no exceptions were raised
-                - If DuplicateEntry is raised, print "[ERROR]: Duplicate Game!"
-                - If EmptyEntry is raised, print "[ERROR]: Empty Entry!"
+                - Print "\nGame successfully added\n" if no exceptions were raised
+                - If DuplicateEntry is raised, print "\n[ERROR]: Duplicate Game!\n"
+                - If EmptyEntry is raised, print "\n[ERROR]: Empty Entry!\n"
             Finally, sleep(3)
             Loop back to (*); This means most, if not all, of your code will be in a While True loop, which only stops upon return
         """
@@ -498,10 +498,10 @@ class Library:
                     - Look in the HashTable class Docstring to see how to delete games using a title
                         + __delitem__ documentation will be useful, especially the "usage" portion
                             
-                If InvalidAccessErr raised, Print "[ERROR]: Game not found", then sleep(3)
+                If InvalidAccessErr raised, Print "\n[ERROR]: Game not found\n", then sleep(3)
                     - Do NOT check for the exception called 'Exception'; you MUST only check for 'InvalidAccessErr'
                         
-                Else, Print "Game successfully deleted", then sleep(3)   
+                Else, Print "\nGame successfully deleted\n", then sleep(3)   
                       
             Loop back to (*); This means most, if not all, of your code will be in a while True loop
         """
