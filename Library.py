@@ -319,31 +319,37 @@ class Library:
     def search(self):
         """
         INSTRUCTIONS:
-            (*) Infinitely ask user for title, if user input is "back", return, else search for game in self.dataBase using the title
+            (*) Prompt user for title using:
+            
+                    title_ = sinp("Enter title, or type 'back' to go back: ") 
+            
+                - If user input is "back", return, else search for game in self.dataBase using the title
                 - "back" can be any combination of upper/lower-case letters
                 - use a try-except to handle SPECIFIC exceptions when game not found (see HashTable class docstr for exceptions)
                     + Do NOT just check for 'Exception', there are specific exceptions for the class
                 (**) What the user should see:
-                    Please enter title, or type 'back' to go back: 
+                
+                        Please enter title, or type 'back' to go back: 
+                        
             Searching:
                 - If game with same title is found:
                     + Print formatted contents of the Game (repr(Game) will return a csv formatted string of Game):
                     + Now prompt user: "Enter 'back' to go back: "
                         Example: repr(foundGame) would return a string like: "CoD, 2.2, 10GB, $40"
                         (***) What the user should see:
-                            Title: CoD
-                            Rating: 2.2
-                            Size: 10GB
-                            Price: $40
-                            "Enter 'back' to go back: 
+                        
+                                Title: CoD
+                                Rating: 2.2
+                                Size: 10GB
+                                Price: $40
+                                
+                                Hit Enter to Return
                             
-                        # "back" can be any combination of upper/lower-case letters
-                        # If input is invalid, print "INVALID INPUT", sleep(3), then show (***) again
-                    + Once user inputs 'back' on the (**) screen, start over at (*)
+                    + Once user hits enter, go back to (**) screen
         """
+        # Your Code here
         return
         
-    
     def loadMemory(self, dir):
         pass
     
@@ -352,19 +358,72 @@ class Library:
         pass
         
     # imports games from a user-specified CSV
-    def importGames(self, fileName):
-        pass
-    
-    # Adds game to library
-    def addGame(self, game_):
-        pass
-    
-    # Deletes a Game instance given a Title
-    def delGame(self, title_):
+    def importGames(self):
         """
         INSTRUCTIONS:
-            Delete a game from self.dataBase
-                - Look in the HashTable class Docstring to see how to delete games
+            (*) Prompt user for filename using:
+            
+                    filename = sinp("Enter filename, or type 'back' to go back: ") 
+                
+                NOTE: If the user input for filename is 'back' (any combo of upper/lower-case letters), return
+                    - Do NOT hard code in all combinations of "back"; use a str function to standardize input
+                Read in a CSV line-by-line 
+                    - For each line, split at ",", then pass the resulting list into the class method Game.stog() (returns Game instance)
+                    - Add Game to self.dataBase using returnedGame.tile & returnedGame
+                    - See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
+                    - You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using try-except blocks
+                        + DO NOT USE 'EXCEPTION', IT MUST BE 'DuplicateEntry' exception
+                        + If EmptyEntry, increment 'emty', an int of the number of failed lines due to empty lines that had commas
+                        + If DuplicateEntry, increment 'dupe', an int of the number of failed lines due to duplicate games in file
+                        + If no exception, increment a variable containging the number of successfully added games
+                Print Results as shown below:
+                
+                                Import Complete
+                            ----------------------
+                            Successful Imports: 40
+                            Duplicate Imports:  3
+                            Empty Imports:      5
+                            
+                            Hit enter to continue: 
+                    
+                Once enter is pressed, loop back to (*)
+        """
+        # Your Code Here
+        return
+    
+    # Adds game to library
+    def addGame(self):
+        """
+        INSTRUCTIONS:
+            (*) Prompt user for title, rating, size (in GB), & price (in $) using:
+                    title_ = sinp("Enter title, or type 'back' to go back: ") 
+                        NOTE: If the user input for title_ is 'back' (any combo of upper/lower-case letters), return, else continue prompts
+                            - Do NOT hard code in all combinations of "back"; use a str function to standardize input
+                    rating_ = sinp("Enter rating: ")
+                    ...
+            
+            Put each in correct order in list of strings, then pass into Game.stog(list), which will return a Game instance
+            Add to self.dataBase (HashTable) using title_ & returned Game instance
+                - Look in the HashTable class Docstring to see how to add games to self.dataBase (__setitem__)
+                - Use Try-Except block to handle DuplicateEntry excptions
+            Print "Game successfully added" if no exceptions were thrown, sleep(2), then loop back to (*)
+        """
+        # Your code here
+        return
+    
+    # Deletes a Game instance given a Title
+    def delGame(self):
+        """
+        INSTRUCTIONS:
+            (*) Prompt user for title using:
+                    title_ = sinp("Enter title, or type 'back' to go back: ") 
+            NOTE: If the user input for title_ is 'back' (any combo of upper/lower-case letters), return
+                - Do NOT hard code in all combinations of "back"; use a str function to standardize input
+            Else, delete a game from self.dataBase
+                - Look in the HashTable class Docstring to see how to delete games from HashTable (__delitem__)
+            Print "Game successfully deleted" if no exceptions are thrown
+            Print "[ERROR]: Game not found" if an InvalidAccessErr is thrown
+            Loop back to (*)
         """
         return
     
@@ -381,8 +440,6 @@ class Library:
                 - Use: 
                         response = sinp("Type 'back' to go back: ") 
                         
-                  for user input; sinp("message") <=> str(input("message"))
-                  
                 - Do NOT hard code in all combinations of "back"; use a str function to standardize input
                 - print "[ERROR] Invalid Response", use command sleep(3), then reprint stating from (*) above
                 - Incorrect input handeling should be theoretically infinite until any version of back is entered
@@ -396,15 +453,6 @@ class Library:
         """
         # your code here
         return 
-    
-    # Prompts user to make a selection from main menu, directs user accordingly 
-    @staticmethod
-    def userMenuSel():
-        sel = sinp("Make a Selection: ")
-        if sel.isdigit() and 1 <= int(sel) <= 7:
-            return int(sel)
-        else:
-            raise InvalidCharacterErr
 
     # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
     @staticmethod
@@ -418,6 +466,12 @@ class Library:
         print("6) Import Library")
         print("7) Save & Exit Program")
         print("###############################")
+        
+        sel = sinp("Make a Selection: ")
+        if sel.isdigit() and 1 <= int(sel) <= 7:
+            return int(sel)
+        else:
+            raise InvalidCharacterErr
     
     # Saves & Exits saftely (writes any unsaved added games)
     def saveAndExit(self):

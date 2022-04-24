@@ -17,7 +17,7 @@ def clear():
 
 ######### Main ##########
 
-gameLibrary = Library(10)
+lib = Library(10)
 
 if __name__ == "__main__":
     user = sinp("Howdy! What is your name?\n")
@@ -26,17 +26,16 @@ if __name__ == "__main__":
     
     while T:
         clear()
-        Library.promptMainMenu()
-        sel = Library.userMenuSel()
+        sel = Library.promptMainMenu()
         print(sel)
     
         match (sel):
-            case 1: gameLibrary.search()
-            case 2: gameLibrary.addGame()
-            case 3: gameLibrary.delGame()
-            case 4: gameLibrary.printLib()
-            case 5: gameLibrary.reset()
-            case 6: gameLibrary.importGames()
-            case 7: gameLibrary.saveAndExit()
+            case 1: lib.search()
+            case 2: lib.addGame()
+            case 3: lib.delGame()
+            case 4: lib.printLib()
+            case 5: lib.reset()
+            case 6: lib.importGames()
+            case 7: lib.saveAndExit()
     
     
