@@ -331,6 +331,10 @@ class Library:
     def reset(self):
         pass
     
+    
+    
+    
+    
     def search(self):
         """
         INSTRUCTIONS:
@@ -372,6 +376,11 @@ class Library:
         # Your Code here
         
         return
+    
+    
+    
+    
+    
         
     # Loads in persistent memory stored in self.MEMDIR
     def loadMemory(self):
@@ -380,6 +389,12 @@ class Library:
     # Writes newly added game(s) to MEMDIR file upon save & exit call
     def writeMemory(self, game_):
         pass
+        
+        
+        
+        
+        
+        
         
     # imports games from a user-specified CSV
     def importGames(self):
@@ -418,6 +433,13 @@ class Library:
         # Your Code Here
         return
     
+    
+    
+    
+    
+    
+    
+    
     # Adds game to library
     def addGame(self):
         """
@@ -450,6 +472,13 @@ class Library:
         # Your code here
         return
     
+    
+    
+    
+    
+    
+    
+    
     # Deletes a Game instance given a Title
     def delGame(self):
         """
@@ -477,10 +506,23 @@ class Library:
         # Your code here
         return 
     
+    
+    
+    
+    
+    
+    
+    
     # Dunder str(); Formats Library's HashTable (dataBase) to printable form
     # Usage str(Library_Instance_Name)
     def __str__(self):
         return str(self.dataBase)
+    
+    
+    
+    
+    
+    
     
     def printLib(self):
         """ 
@@ -505,6 +547,9 @@ class Library:
         # your code here
         
         return
+
+
+
 
 
 
