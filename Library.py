@@ -1,6 +1,7 @@
 ########## Libraries ##########
 import os
 import csv
+from time import sleep
 from xml.dom import InvalidAccessErr, InvalidCharacterErr
 from utils import DuplicateEntry, EmptyEntry
 from colorama import init, Fore as fg, Back as bg, Style as st
@@ -40,6 +41,10 @@ class Game:
         __str__(self): 
             Returns:
                 str: representing a Game's attributes
+                
+        __repr__(self): 
+            Returns:
+                str: representing a Game's in csv format (FOR DEVELOPER ONLY)
         
     Class Methods:
         stog(cls, line): Secondary Constructor  
@@ -47,7 +52,7 @@ class Game:
                 cls: class (automatically passed in)
                 line (list): A list parsed by the imported CSV library
             Usage:
-                Game1.stog(list)
+                Game.stog(list)
             Returns:
                 Game: instance initialized with data from CSV line
     """
@@ -59,6 +64,9 @@ class Game:
     
     def __str__(self):
         return f"[{self.title},{self.rating},{self.size},{self.price}]"
+    
+    def __repr__(self):
+        return f"{self.title},{self.rating},{self.size},{self.price}"
     
     @classmethod
     def stog(cls, line):
@@ -75,13 +83,13 @@ class Node:
     Instance Methods:
         __str__(self): 
             Usage:
-                str(Node1)
+                str(node1)
             Returns:
                 str: Represents a Node's attributes
                 
         getTitle(self):
             Usage:
-                Node1.getTitle()
+                node1.getTitle()
             Returns:
                 str: title of the Game stored in the Node
     """
@@ -117,13 +125,13 @@ class LinkedList:
                 
         __len__(self): Length of Linked List
             Usage:
-                len(LinkedList1)
+                len(linkedlist1)
             Returns:
                 int: Number of non-None Nodes in Linked List
                 
         __str__(self): 
             Usage:
-                str(LinkedList1)
+                str(linkedlist1)
             Returns:
                 str: representing a Linked List 
                 
@@ -131,7 +139,7 @@ class LinkedList:
             Args:
                 title (str): Title of game to delete
             Usage:
-                del LinkedList[title] 
+                del linkedlist1[title] 
             Exceptions:
                 InvalidAccessErr: When title is not present in Linked List
                 
@@ -139,7 +147,7 @@ class LinkedList:
             Args:
                 game_ (Game): Game instance to add to Linked List
             Usage:
-                LinkedList1.emplace_back(Game) 
+                linkedlist1.emplace_back(Game) 
             Exceptions:
                 DuplicateEntry: When Game with same title already exists in Linked List
     """
@@ -303,25 +311,44 @@ class Library:
         self.MEMDIR = mem
         
         self.loadMemory(self.MEMDIR)
-        
-    # Returns Game data by title
-    def search(self, title_):
-        pass
     
-    # Returns Game data by title
+    # Resets entire game Library including LibMem.csv
     def reset(self):
         pass
     
-    # Returns Game data by title
-    def search(self, title_):
-        pass
+    def search(self):
+        """
+        INSTRUCTIONS:
+            (*) Infinitely ask user for title, if user input is "back", return, else search for game in self.dataBase using the title
+                - "back" can be any combination of upper/lower-case letters
+                - use a try-except to handle SPECIFIC exceptions when game not found (see HashTable class docstr for exceptions)
+                    + Do NOT just check for 'Exception', there are specific exceptions for the class
+                (**) What the user should see:
+                    Please enter title, or type 'back' to go back: 
+            Searching:
+                - If game with same title is found:
+                    + Print formatted contents of the Game (repr(Game) will return a csv formatted string of Game):
+                    + Now prompt user: "Enter 'back' to go back: "
+                        Example: repr(foundGame) would return a string like: "CoD, 2.2, 10GB, $40"
+                        (***) What the user should see:
+                            Title: CoD
+                            Rating: 2.2
+                            Size: 10GB
+                            Price: $40
+                            "Enter 'back' to go back: 
+                            
+                        # "back" can be any combination of upper/lower-case letters
+                        # If input is invalid, print "INVALID INPUT", sleep(3), then show (***) again
+                    + Once user inputs 'back' on the (**) screen, start over at (*)
+        """
+        return
         
-    # Loads in file named in MEMDIR (str) at program start
+    
     def loadMemory(self, dir):
         pass
     
     # Writes newly added game to MEMDIR file 
-    def writeMemory(self):
+    def writeMemory(self, game_):
         pass
         
     # imports games from a user-specified CSV
@@ -334,21 +361,45 @@ class Library:
     
     # Deletes a Game instance given a Title
     def delGame(self, title_):
-        # 1-liner: delete a game from database the same way you'd delete an element from dictionary
-        pass
-    
-    # Returns Game data by title
-    def printLib(self):
-        pass
+        """
+        INSTRUCTIONS:
+            Delete a game from self.dataBase
+                - Look in the HashTable class Docstring to see how to delete games
+        """
+        return
     
     # Dunder str(); Formats Library's HashTable (dataBase) to printable form
     def __str__(self):
-        # 1-liner: return dataBase as a string
-        pass
+        return str(self.dataBase)
+    
+    def printLib(self):
+        """ 
+        INSTRUCTIONS:
+            (*) Print self cast as str
+            On a newline, prompt for user for input any upper/lower-case combination of "back" 
+                - (eg Back, back, BACK, BaCk, etc. are all accepted)
+                - Use: 
+                        response = sinp("Type 'back' to go back: ") 
+                        
+                  for user input; sinp("message") <=> str(input("message"))
+                  
+                - Do NOT hard code in all combinations of "back"; use a str function to standardize input
+                - print "[ERROR] Invalid Response", use command sleep(3), then reprint stating from (*) above
+                - Incorrect input handeling should be theoretically infinite until any version of back is entered
+                
+            What user should see (if Library is size 3, & only 1 game has been added):
+                Empty List
+                [CoD, 2.2, 10GB, $40]->[None]
+                Empty List
+                
+                Type 'back' to go back: 
+        """
+        # your code here
+        return 
     
     # Prompts user to make a selection from main menu, directs user accordingly 
     @staticmethod
-    def userSel():
+    def userMenuSel():
         sel = sinp("Make a Selection: ")
         if sel.isdigit() and 1 <= int(sel) <= 7:
             return int(sel)

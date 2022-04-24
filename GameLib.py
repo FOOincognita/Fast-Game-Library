@@ -27,11 +27,11 @@ if __name__ == "__main__":
     while T:
         clear()
         Library.promptMainMenu()
-        sel = Library.userSel()
+        sel = Library.userMenuSel()
         print(sel)
     
         match (sel):
-            case 1: gameLibrary.search("")
+            case 1: gameLibrary.search()
             case 2: gameLibrary.addGame()
             case 3: gameLibrary.delGame()
             case 4: gameLibrary.printLib()
