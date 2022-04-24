@@ -486,6 +486,7 @@ class Library:
         """ 
         INSTRUCTIONS:
             (*) Print Library as a string (the function right above you will allow self to be cast as a string)
+                + do NOT use str(self.dataBase)
             Print a newline, then prompt user for input using:
              
                     response = sinp("Press Enter to go back: ") 
