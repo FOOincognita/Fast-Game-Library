@@ -342,14 +342,14 @@ class Library:
             
                     title_ = sinp("Enter Title, or Type 'back' to Go Back: ") 
             
-                - If user input is "back", return
-                - Else search for game in self.dataBase using title_ (HashTable's __getitem__ documentation will be useful here)
-                - "back" can be any combination of upper/lower-case letters
-                    + Do NOT hard code every combination of 'back'; use a string method to standardize input
-                    What the user should see:
+                If user input is "back", return
+                    - "back" can be any combination of upper/lower-case letters
+                        + Do NOT hard code every combination of 'back'; use a string method to standardize input
+                What the user should see:
                 
-                        Please enter title, or type 'back' to go back: 
-                        
+                    Please enter title, or type 'back' to go back: 
+                    
+                Else search for game in self.dataBase using title_ (HashTable's __getitem__ documentation will be useful here)           
             Searching:
                 Use a try-except-else to handle InvalidAccessErr exceptions when game not found (see HashTable class docstring)
                     NOTE: Do NOT just check for 'Exception', you must ONLY check for InvalidAccessErr
@@ -407,15 +407,15 @@ class Library:
                 NOTE: If the user input for filename is 'back' (any combo of upper/lower-case letters), return
                     - Do NOT hard code in all combinations of "back"; use a str function to standardize input
                 Read in a CSV or txt file line-by-line (assume txt/csv are formatted as a CSV)
-                    - For each line, split into a list of 4 strings for each piece of data then pass the resulting list into 
-                            the class method Game.stog(), which will return a Game instance (See Game Docstring for more info)
-                    - Add Game to self.dataBase (You can use YourgameVarHere.title to access the title of the game)
+                    - For each line, split into a list of 4 strings for each piece of data ([title, rating, size, price]) then pass the 
+                            resulting list into the class method Game.stog(list goes here), which will return a Game instance (See Game Docstring for more info)
+                    - Add Game to self.dataBase (You can use GameVar.title to access the title of the game)
                         + See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
-                    NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-except-else block 
-                        + DO NOT USE 'EXCEPTION', IT MUST BE 'DuplicateEntry' exception, then 'EmptyEntry' exception
-                    - If EmptyEntry is raised, increment 'emt', an int variable of the number of failed lines due to empty lines that had commas
-                    - If DuplicateEntry is raised, increment 'dupe', an int variable of the number of failed lines due to duplicate games in file
-                    - If no exception, increment 'good', an int variable containging the number of successfully added games
+                    NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-except-else block (see #resources channel)
+                        + DO NOT USE 'Exception', IT MUST BE 'DuplicateEntry' exception, or 'EmptyEntry' exception
+                    - If EmptyEntry is raised, increment 'emtEntry', an int variable of the number of failed lines due to empty lines that had commas
+                    - If DuplicateEntry is raised, increment 'dupeEntry', an int variable of the number of failed lines due to duplicate games in file
+                    - If no exception, increment 'passed', an int variable containging the number of successfully added games
                 When the end of the file is reached, print results as shown below:
                     NOTE: All of the import data (the int variables) on the right should be aligned 
                 
