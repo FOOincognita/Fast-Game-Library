@@ -1,7 +1,7 @@
 ########## Libraries ##########
 import os
-import csv
-from time import sleep
+import csv # You can use this to work with .csv files, but that's up to you
+from time import sleep # Calling sleep(3) will make the program pause for 3 seconds
 from xml.dom import InvalidAccessErr, InvalidCharacterErr
 from utils import DuplicateEntry, EmptyEntry
 from colorama import init, Fore as fg, Back as bg, Style as st
@@ -26,13 +26,13 @@ F = False
 def clear():
     os.system('cls||clear')
 
-########## Classes ##########
-
-###################################################################### GAME CLASS BELOW ###################################################################### 
-
+###################################################################### GAME CLASS ###################################################################### 
 class Game:
     """
-    Each instance represents a single Game 
+    Each instance represents a single Game
+        Usage:
+            Access data:
+                Gtitle_ = gameVariable.title <- sets Gtitle_ equal to string containing title of Game
 
     Attributes:
         title (str, optional): Game Title. Defaults to "N/A".
@@ -48,6 +48,8 @@ class Game:
         __repr__(self): 
             Returns:
                 str: representing a Game's in csv format (FOR DEVELOPER ONLY)
+            Usage:
+                gameString = repr(gameVariable) <- returns string formatted like a CSV line for parsing
         
     Class Methods:
         stog(cls, line): Secondary Constructor  
@@ -55,7 +57,7 @@ class Game:
                 cls: class (automatically passed in)
                 line (list): A list parsed by the imported CSV library, or manually using split
             Usage:
-                newGame = Game.stog(list)
+                gameVariable = Game.stog(list) <- returns Game instance populated with data from the list passed in
             Returns:
                 Game: instance initialized with data from CSV line
     """
@@ -76,10 +78,10 @@ class Game:
         return cls(*line)
 
 
-###################################################################### NODE CLASS BELOW ###################################################################### 
+###################################################################### NODE CLASS ###################################################################### 
 
 class Node:
-    """
+    """ [YOU CAN IGNORE THIS CLASS]
     Represents a single Node in a Linked List
     
     Attributes:
@@ -110,10 +112,10 @@ class Node:
         return str(self.data)
     
     
-###################################################################### LINKEDLIST CLASS BELOW ###################################################################### 
+###################################################################### LINKEDLIST CLASS ###################################################################### 
 
 class LinkedList:
-    """
+    """ [YOU CAN IGNORE THIS CLASS]
     Linked List used in Hash Table to implement chaining method for handling collisions 
     
     Attributes:
@@ -218,11 +220,11 @@ class LinkedList:
                 return
 
 
-###################################################################### HASHTABLE CLASS BELOW ###################################################################### 
+###################################################################### HASHTABLE CLASS ###################################################################### 
 
 class HashTable:
-    """
-    Hash Table which contains all Games in Library. Uses chaining to handle collisions
+    """ [IMPORTANT]: Library's self.dataBase attribute is a HashTable (basically a dictionary)
+    Hash Table data structure which contains all Games in Library. Uses Linked Lists for chaining to handle collisions
     
     Attributes:
         SIZE (int, optional): Number of linked Lists within arr. Defaults to 50
@@ -315,7 +317,7 @@ class HashTable:
         return i
     
     
-###################################################################### LIBRARY CLASS BELOW ###################################################################### 
+###################################################################### LIBRARY CLASS ###################################################################### 
     
 # Serves as the highest abstract data type (class), which contains the game database 
 class Library:
@@ -334,7 +336,7 @@ class Library:
     
     
     
-    # Searches for single game. If found, displays it in terminal, else throws error
+    # Searches for single game by user inputted title
     def search(self):
         """
         INSTRUCTIONS:
