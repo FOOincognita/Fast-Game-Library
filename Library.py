@@ -53,7 +53,7 @@ class Game:
         stog(cls, line): Secondary Constructor  
             Args:
                 cls: class (automatically passed in)
-                line (list): A list parsed by the imported CSV library
+                line (list): A list parsed by the imported CSV library, or manually using split
             Usage:
                 newGame = Game.stog(list)
             Returns:
