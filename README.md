@@ -1,5 +1,5 @@
 # ENGR102-FinProj
-This repository holds all versions of our final project for ENGR-102
+This repository holds all versions of our final project for ENGR-102.
 
 Library.py:
   - Contains all data structures necessary for our program to store & retreieve data fast. 
