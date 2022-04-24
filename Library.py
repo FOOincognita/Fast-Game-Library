@@ -27,6 +27,9 @@ def clear():
     os.system('cls||clear')
 
 ########## Classes ##########
+
+###################################################################### GAME CLASS BELOW ###################################################################### 
+
 class Game:
     """
     Each instance represents a single Game 
@@ -72,6 +75,9 @@ class Game:
     def stog(cls, line):
         return cls(*line)
 
+
+###################################################################### NODE CLASS BELOW ###################################################################### 
+
 class Node:
     """
     Represents a single Node in a Linked List
@@ -103,6 +109,9 @@ class Node:
     def __str__(self):
         return str(self.data)
     
+    
+###################################################################### LINKEDLIST CLASS BELOW ###################################################################### 
+
 class LinkedList:
     """
     Linked List used in Hash Table to implement chaining method for handling collisions 
@@ -207,6 +216,9 @@ class LinkedList:
             if node.next is None:
                 node.next = Node(game_)
                 return
+
+
+###################################################################### HASHTABLE CLASS BELOW ###################################################################### 
 
 class HashTable:
     """
@@ -519,7 +531,7 @@ class Library:
     def saveAndExit(self):
         exit() 
         
-########## Main ##########
+###################################################################### MAIN BELOW ###################################################################### 
 if __name__ == "__main__":
     pass
 
