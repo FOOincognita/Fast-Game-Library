@@ -420,7 +420,7 @@ class Library:
                         + DO NOT USE 'Exception', IT MUST BE 'DuplicateEntry' exception, or 'EmptyEntry' exception
                     - If EmptyEntry is raised, increment 'emtEntry', an int variable of the number of failed lines due to empty lines that had commas
                     - If DuplicateEntry is raised, increment 'dupeEntry', an int variable of the number of failed lines due to duplicate games in file
-                    - If no exception, increment 'passed', an int variable containging the number of successfully added games
+                    - If no exception, increment 'passed', an int variable containing the number of successfully added games
                 When the end of the file is reached, print results as shown below, with "Press Enter to Continue 2 lines below that:
                     NOTE: All of the import data (the int variables) on the right should be aligned 
                 
@@ -514,16 +514,18 @@ class Library:
             If the user input for title_ is any combo of upper/lower-case letters of "back", return
                 - "back", "Back", "BaCk", & all other combinations should be accepted as equal to "back"
                 - Do NOT hard code in all combinations of "back"; use a str function to standardize string input
-            Else, using a try-except-else block:
+            Else, using a try-except-else-finally block:
             
                 Try to delete game from self.dataBase using title_
                     - Look in the HashTable class Docstring to see how to delete games using a title
                         + __delitem__ documentation will be useful, especially the "usage" portion
                             
-                If InvalidAccessErr raised, Print "\n[ERROR]: Game not found\n", then sleep(3)
+                If InvalidAccessErr raised, Print "\n[ERROR]: Game not found\n"
                     - Do NOT check for the exception called 'Exception'; you MUST only check for 'InvalidAccessErr'
                         
-                Else, Print "\nGame successfully deleted\n", then sleep(3)   
+                Else, Print "\nGame successfully deleted\n"   
+                
+                Finally, sleep(3)
                       
             Loop back to (*); This means most, if not all, of your code will be in a while True loop
         """
