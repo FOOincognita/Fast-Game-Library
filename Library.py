@@ -395,10 +395,17 @@ class Library:
     def addGame(self):
         """
         INSTRUCTIONS:
-            (*) Prompt user for title, rating, size (in GB), & price (in $) using:
+            (*) Prompt user for title using:
+            
                     title_ = sinp("Enter title, or type 'back' to go back: ") 
-                        NOTE: If the user input for title_ is 'back' (any combo of upper/lower-case letters), return, else continue prompts
-                            - Do NOT hard code in all combinations of "back"; use a str function to standardize input
+                    
+                    NOTE: 
+                        - If user enters 'back' (any combo of upper/lower-case letters), return
+                            + Do NOT hard code in all combinations of "back"; use a str function to standardize input
+                        - Else prompt for rating, size (in GB), & price (in $)
+                            + Add "GB" if missing from user inputted size string
+                            + Add "$" if missing from user inputted price string
+                        
                     rating_ = sinp("Enter rating: ")
                     ...
             
@@ -416,16 +423,26 @@ class Library:
         """
         INSTRUCTIONS:
             (*) Prompt user for title using:
-                    title_ = sinp("Enter title, or type 'back' to go back: ") 
-            NOTE: If the user input for title_ is 'back' (any combo of upper/lower-case letters), return
-                - Do NOT hard code in all combinations of "back"; use a str function to standardize input
-            Else, delete a game from self.dataBase
-                - Look in the HashTable class Docstring to see how to delete games from HashTable (__delitem__)
-            Print "Game successfully deleted" if no exceptions are thrown
-            Print "[ERROR]: Game not found" if an InvalidAccessErr is thrown
+            
+                    title_ = sinp("Enter Title of Game, or 'back' to Return to Main Menu: ") 
+                    
+            If the user input for title_ is any combo of upper/lower-case letters of "back", return
+                - "back", "Back", "BaCk", & all other combinations should be accepted as equal to "back"
+                - Do NOT hard code in all combinations of "back"; use a str function to standardize string input
+            Else, using a try-except-else block:
+            
+                Delete game from self.dataBase using title_
+                    - Look in the HashTable class Docstring to see how to delete games using a title
+                        + __delitem__() documentation will be useful, especially the "usage" portion
+                            
+                If InvalidAccessErr raised, Print "[ERROR]: Game not found", then sleep(3)
+                    - Do NOT check for the exception called 'Exception'; you MUST only check for 'InvalidAccessErr'
+                        
+                Else, Print "Game successfully deleted" ONLY if no exceptions are raised   
+                      
             Loop back to (*)
         """
-        return
+        return # Do not return anything; when done, just return
     
     # Dunder str(); Formats Library's HashTable (dataBase) to printable form
     def __str__(self):
@@ -434,25 +451,27 @@ class Library:
     def printLib(self):
         """ 
         INSTRUCTIONS:
-            (*) Print self cast as str
-            On a newline, prompt for user for input any upper/lower-case combination of "back" 
-                - (eg Back, back, BACK, BaCk, etc. are all accepted)
-                - Use: 
-                        response = sinp("Type 'back' to go back: ") 
-                        
-                - Do NOT hard code in all combinations of "back"; use a str function to standardize input
-                - print "[ERROR] Invalid Response", use command sleep(3), then reprint stating from (*) above
-                - Incorrect input handeling should be theoretically infinite until any version of back is entered
+            (*) Print self as str (the passed in arg "self", & the str() function will be useful here)
+            Print a newline, then prompt user for input using:
+             
+                    userIn = sinp("Press enter to go back: ") <- this will set response equal to a str of user input
                 
-            What user should see (if Library is size 3, & only 1 game has been added):
-                Empty List
-                [CoD, 2.2, 10GB, $40]->[None]
-                Empty List
+            What user should see (Library with a size of 3, & only 1 game has been added):
+            
+                    Empty List
+                    [CoD, 2.2, 10GB, $40]->[None]
+                    Empty List
                 
-                Type 'back' to go back: 
+                    Press Enter to go back
+
+            Once they hit enter, return 
         """
         # your code here
-        return 
+        
+        
+        
+        
+        return # You can leave this just like it is
 
     # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
     @staticmethod
@@ -474,13 +493,10 @@ class Library:
             raise InvalidCharacterErr
     
     # Saves & Exits saftely (writes any unsaved added games)
+    # TODO: IMPLEMENT FULL FUNCTIONALITY
     def saveAndExit(self):
-        exit() ########## TEMP
+        exit() 
         
 ########## Main ##########
 if __name__ == "__main__":
     pass
-    
-    
-    
-    
