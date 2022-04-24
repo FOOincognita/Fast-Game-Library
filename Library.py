@@ -335,12 +335,13 @@ class Library:
                         Please enter title, or type 'back' to go back: 
                         
             Searching:
-                Use a try-except to handle InvalidAccessErr exceptions when game not found (see HashTable class docstring)
-                    - Do NOT just check for 'Exception', you must ONLY check for InvalidAccessErr
-                    - If InvalidAccessErr is raised, Print "[Error]: Game not Found", then sleep(3), then loop back to (*)
+                Use a try-except-else to handle InvalidAccessErr exceptions when game not found (see HashTable class docstring)
+                    NOTE: Do NOT just check for 'Exception', you must ONLY check for InvalidAccessErr
+                If InvalidAccessErr is raised, Print "[Error]: Game not Found", then sleep(3), then loop back to (*)
                 If game with same title is found:
-                    - Print formatted contents of the found Game (repr(foundGame) will return a csv formatted string of Game):
-                        + Ensure all data to the right is formatted to be aligned
+                    - Print formatted contents of the found Game as shown below
+                        NOTE: repr(foundGame) will return a string formatted just like a csv of the Game returned by search
+                        + Ensure all data is aligned when printed
                     - 2 lines under the formatted Game, prompt for input with message: "Hit Enter to Return"
                         Example: repr(foundGame) would return a string like: "CoD, 2.2, 10GB, $40"
                         What the user should see if game is Found:
@@ -353,6 +354,7 @@ class Library:
                                 Hit Enter to Return
                             
                     + Once user hits enter, loop back to (*) screen
+                        NOTE: This means most, if not all, of your code will be in a while True loop, which stops when return is called
         """
         
         # Your Code here
@@ -379,16 +381,16 @@ class Library:
                     - Do NOT hard code in all combinations of "back"; use a str function to standardize input
                 Read in a CSV or txt file line-by-line (assume txt/csv are formatted as a CSV)
                     - For each line, split into a list of 4 strings for each piece of data then pass the resulting list into 
-                                        the class method Game.stog(), which will return a Game instance (See Game Docstring for more info)
-                    - Add Game to self.dataBase (You can use YourgameVar.title to access the title of the game)
+                            the class method Game.stog(), which will return a Game instance (See Game Docstring for more info)
+                    - Add Game to self.dataBase (You can use YourgameVarHere.title to access the title of the game)
                         + See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
-                    - You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using try-except-except 
-                        + DO NOT USE 'EXCEPTION', IT MUST BE 'DuplicateEntry' exception
+                    NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-except-else block 
+                        + DO NOT USE 'EXCEPTION', IT MUST BE 'DuplicateEntry' exception, then 'EmptyEntry' exception
                     - If EmptyEntry is raised, increment 'emt', an int variable of the number of failed lines due to empty lines that had commas
                     - If DuplicateEntry is raised, increment 'dupe', an int variable of the number of failed lines due to duplicate games in file
                     - If no exception, increment 'good', an int variable containging the number of successfully added games
                 When the end of the file is reached, print results as shown below:
-                    + All of the import data (the int variables) on the right should be aligned 
+                    NOTE: All of the import data (the int variables) on the right should be aligned 
                 
                                 Import Complete
                             ----------------------
