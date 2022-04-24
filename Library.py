@@ -461,12 +461,14 @@ class Library:
             
             Put each in correct order in list of strings, then pass into Game.stog(list) (returns a Game instance)
                 - See Game's Docstring for stog usage
-            Use Try-Except block to handle DuplicateEntry exceptions for next steps
+            Use Try-Except-Except-Else-finally block to handle DuplicateEntry exceptions for next steps
                 - Do NOT check for 'Exception'; you must only check for DuplicateEntry exceptions
             Try to add Game to self.dataBase (HashTable) using title_ & the Game instance returned by Game.stog()
                 - Look in the HashTable class Docstring to see how to add games to self.dataBase (HashTable's __setitem__ will be useful)
-                - Print "Game successfully added" if no exceptions were raised, then sleep(3)
-                - If Duplicate entry is raised, print "[ERROR]: Duplicate Game!", sleep(3)
+                - Print "Game successfully added" if no exceptions were raised
+                - If DuplicateEntry is raised, print "[ERROR]: Duplicate Game!"
+                - If EmptyEntry is raised, print "[ERROR]: Empty Entry!"
+            Finally, sleep(3)
             Loop back to (*); This means most, if not all, of your code will be in a While True loop, which only stops upon return
         """
         # Your code here
