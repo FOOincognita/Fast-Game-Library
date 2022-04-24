@@ -12,7 +12,7 @@ NULLCOLOR = st.BRIGHT + bg.BLACK + fg.BLUE
 EMPTYCOLOR = st.BRIGHT + bg.BLACK + fg.RED
 ARROW = chr(10236) + " "
 
-sinp = lambda x: str(input(x))
+sinp = lambda x: str(input(x)) # <- "response = sinp("Enter input: ")" is the exact same as "response = str(input("Enter input: "))"
 gmestr = lambda x:  GAMECOLOR + str(x) + st.RESET_ALL
 nullstr = lambda x: ARROW + NULLCOLOR + str(x) + st.RESET_ALL
 
@@ -338,7 +338,7 @@ class Library:
     def search(self):
         """
         INSTRUCTIONS:
-            (*) Prompt user for title using:
+            (*) Prompt user for title using (see sinp at very top of file):
             
                     title_ = sinp("Enter Title, or Type 'back' to Go Back: ") 
             
@@ -400,7 +400,7 @@ class Library:
     def importGames(self):
         """
         INSTRUCTIONS:
-            (*) Prompt user for filename using:
+            (*) Prompt user for filename using (see sinp at very top of file):
             
                     filename = sinp("Enter filename, or type 'back' to go back: ") 
                 
@@ -444,7 +444,7 @@ class Library:
     def addGame(self):
         """
         INSTRUCTIONS:
-            (*) Prompt user for title using:
+            (*) Prompt user for title using (see sinp at very top of file):
             
                     title_ = sinp("Enter title, or type 'back' to go back: ") 
                     
@@ -483,7 +483,7 @@ class Library:
     def delGame(self):
         """
         INSTRUCTIONS:
-            (*) Prompt user for title using:
+            (*) Prompt user for title using (see sinp at very top of file):
             
                     title_ = sinp("Enter Title of Game, or 'back' to Return to Main Menu: ") 
                     
@@ -529,7 +529,7 @@ class Library:
         INSTRUCTIONS:
             (*) Print Library as a string (the function right above you will allow self to be cast as a string)
                 + do NOT use str(self.dataBase)
-            Print a newline, then prompt user for input using:
+            Print a newline, then prompt user for input using (see sinp at very top of file):
              
                     response = sinp("Press Enter to go back: ") 
                 
