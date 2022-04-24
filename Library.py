@@ -334,7 +334,7 @@ class Library:
     
     
     
-    
+    # Searches for single game. If found, displays it in terminal, else throws error
     def search(self):
         """
         INSTRUCTIONS:
@@ -343,7 +343,7 @@ class Library:
                     title_ = sinp("Enter Title, or Type 'back' to Go Back: ") 
             
                 If user input is "back", return
-                    - "back" can be any combination of upper/lower-case letters
+                    - "back" can be any combination of upper/lower-case letters (eg 'back', 'BaCk', 'BACk', etc.)
                         + Do NOT hard code every combination of 'back'; use a string method to standardize input
                 What the user should see:
                 
@@ -357,7 +357,7 @@ class Library:
                 If game with same title is found:
                     - Print formatted contents of the found Game as shown below
                         NOTE: repr(foundGame) will return a string formatted just like a csv of the Game returned by search
-                        + Ensure all data is aligned when printed
+                        + Ensure all data on the right of ':' is aligned when printed as shown
                     - 2 lines under the formatted Game, prompt for input with message: "Hit Enter to Return"
                         Example: repr(foundGame) would return a string like: "CoD, 2.2, 10GB, $40"
                         What the user should see if game is Found:
@@ -381,6 +381,8 @@ class Library:
     
     
     
+    
+    
         
     # Loads in persistent memory stored in self.MEMDIR
     def loadMemory(self):
@@ -389,6 +391,7 @@ class Library:
     # Writes newly added game(s) to MEMDIR file upon save & exit call
     def writeMemory(self, game_):
         pass
+        
         
         
         
@@ -416,7 +419,7 @@ class Library:
                     - If EmptyEntry is raised, increment 'emtEntry', an int variable of the number of failed lines due to empty lines that had commas
                     - If DuplicateEntry is raised, increment 'dupeEntry', an int variable of the number of failed lines due to duplicate games in file
                     - If no exception, increment 'passed', an int variable containging the number of successfully added games
-                When the end of the file is reached, print results as shown below:
+                When the end of the file is reached, print results as shown below, with "Press Enter to Continue 2 lines below that:
                     NOTE: All of the import data (the int variables) on the right should be aligned 
                 
                                 Import Complete
@@ -425,13 +428,22 @@ class Library:
                             Duplicate Imports:  3
                             Empty Imports:      5
                             
-                            Press enter to continue
+                            Press Enter to Continue
                     
                 Once enter is pressed, loop back to (*); 
                     NOTE: This means most of your code will be within a while True loop; only stops looping when returned
         """
+        
+        
         # Your Code Here
+        
+        
         return
+    
+    
+    
+    
+    
     
     
     
@@ -471,8 +483,16 @@ class Library:
             Finally, sleep(3)
             Loop back to (*); This means most, if not all, of your code will be in a While True loop, which only stops upon return
         """
+        
+        
         # Your code here
+        
+        
+        
         return
+    
+    
+    
     
     
     
@@ -505,8 +525,15 @@ class Library:
                       
             Loop back to (*); This means most, if not all, of your code will be in a while True loop
         """
+        
+        
         # Your code here
+        
+        
         return 
+    
+    
+    
     
     
     
@@ -525,7 +552,7 @@ class Library:
     
     
     
-    
+    # Prints library to terminal
     def printLib(self):
         """ 
         INSTRUCTIONS:
@@ -546,7 +573,9 @@ class Library:
             Once they hit enter, return 
         """
         
+        
         # your code here
+        
         
         return
 
