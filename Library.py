@@ -307,7 +307,7 @@ class Library:
     
     def __init__(self, size=50, mem="LibMem.csv"):
         self.dataBase = HashTable(size)   
-        self.printable = [] # Stroes titles of Games in lexicographical order for printing
+        self.printable = [] # Stores titles of Games in lexicographical order for printing
         self.MEMDIR = mem
         
         self.loadMemory(self.MEMDIR)
@@ -442,7 +442,7 @@ class Library:
                       
             Loop back to (*)
         """
-        return # Do not return anything; when done, just return
+        return 
     
     # Dunder str(); Formats Library's HashTable (dataBase) to printable form
     def __str__(self):
@@ -466,12 +466,13 @@ class Library:
 
             Once they hit enter, return 
         """
+        
         # your code here
         
-        
-        
-        
-        return # You can leave this just like it is
+        return
+
+
+
 
     # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
     @staticmethod
@@ -500,3 +501,6 @@ class Library:
 ########## Main ##########
 if __name__ == "__main__":
     pass
+
+
+# Signup Sheet: https://docs.google.com/spreadsheets/d/1FHZYT3ugd7z8yNfNrpPMC92HNbMRgKagbsxZSr7g1Bs/edit?usp=sharing
