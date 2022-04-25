@@ -11,6 +11,9 @@ class DuplicateEntry(Exception): pass
 # Used as a custom exception when an empty or N/A title is passed (INVALID ENTRY)
 class EmptyEntry(Exception): pass
 
+# Used as a custom exception when anything other than ints 1-8 are entered in main menu
+class InvalidSelection(Exception): pass
+
 def should_install_requirement(requirement):
     should_install = False
     try:

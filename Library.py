@@ -3,7 +3,7 @@ import os
 import csv # You can use this to work with .csv files, but that's up to you
 from time import sleep # Calling sleep(3) will make the program pause for 3 seconds
 from xml.dom import InvalidAccessErr, InvalidCharacterErr
-from utils import DuplicateEntry, EmptyEntry
+from utils import DuplicateEntry, EmptyEntry, InvalidSelection
 from colorama import init, Fore as fg, Back as bg, Style as st
 init(autoreset=True)
 
@@ -15,6 +15,7 @@ ARROW = chr(10236) + " "
 sinp = lambda x: str(input(x)) # <- "response = sinp("Enter input: ")" is the exact same as "response = str(input("Enter input: "))"
 gmestr = lambda x:  GAMECOLOR + str(x) + st.RESET_ALL
 nullstr = lambda x: ARROW + NULLCOLOR + str(x) + st.RESET_ALL
+ylwtxt = lambda x: st.BRIGHT + fg.YELLOW + str(x) + st.RESET_ALL
 
 ########## Global Constants ##########
 T = True
@@ -329,7 +330,7 @@ class Library:
         self.printable = [] # Stores titles of Games in lexicographical order for printing
         self.MEMDIR = mem
         
-        self.loadMemory(self.MEMDIR)
+        self.loadMemory()
     
     # Resets entire game Library including LibMem.csv
     def resetLib(self):
@@ -608,16 +609,16 @@ class Library:
         print("8) Save & Exit Program")
         print("###############################")
         
-        sel = sinp("Make a Selection: ")
+        sel = sinp(ylwtxt("Please Make a Selection: "))
         if sel.isdigit() and 1 <= int(sel) <= 8:
             return int(sel)
         else:
-            raise InvalidCharacterErr
+            raise InvalidSelection(sel)
     
     # Saves & Exits saftely (writes any unsaved added games)
     # TODO: IMPLEMENT FULL FUNCTIONALITY
     def saveAndExit(self):
-        exit() 
+        exit()
         
 ###################################################################### MAIN ###################################################################### 
 if __name__ == "__main__":
