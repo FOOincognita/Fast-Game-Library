@@ -231,35 +231,37 @@ class HashTable:
         arr (list): list containing LinkedLists
         
     Instance Methods:
-        hash(self, title): Generates hashed index based on the summation of ASCII values in key; AKA Hash Function
+        hash(self, title_): Generates hashed index based on the summation of ASCII values in key; AKA Hash Function
             Args:
-                title (str): title of Game instance
+                title_ (str): title of Game instance
             Usage:
-                HashTable1.hash(title)
+                hashValue = self.hash(title_) or hashValue = HashTableInstance.hash(title_)
             Returns:
-                int: hashed integer in interval [0,SIZE]
+                int: hashed integer in interval [0,self.SIZE]
         
         __setitem__(self, title_, game_): Inserts Game object into HashTable
             Args:
                 title_ (str): Title of game
                 game_ (str): Game instance
             Usage:
-                HashTable1[title] = Game
+                HashTableVariable[title_] = game_
             Exceptions:
                 EmptyEntry: When a Game instnace has title "N/A" or ""
                 DuplicateEntry: When a Game with same title is already in HashTable
                 
         __getitem__(self, title_): Length of Linked List
+            Args:
+                title_ (str): title of Game instance
             Usage:
-                HashTable1[title]
+                gameVariable = HashTableVariable[title_]
             Returns:
-                Game: Game instnace with specified title
+                Game: Game instnace with specified title (if one exists in HashTable instance)
             Exceptions:
                 InvalidAccessErr: When a Game with passed title is not in Hash Table
                 
         __str__(self): Formats table to str
             Usage:
-                str(HashTable1)
+                str(self) or str(HashTableVariable)
             Returns:
                 str: representing a Hash Table
                 
@@ -267,13 +269,13 @@ class HashTable:
             Args:
                 title_ (str): Title of Game to delete
             Usage:
-                del HashTable1[title] 
+                del HashTableVariable[title_] 
             Exceptions:
                 InvalidAccessErr: When title is not present in Linked List
                 
         __len__(self): Gets Number of Games in Hash Table
             Usage:
-                len(HashTable1)
+                length = len(HashTableVariable) or length = len(self)
             Returns:
                 int: Number of Games in HashTable
     """
@@ -281,9 +283,9 @@ class HashTable:
         self.SIZE = size
         self.arr = [LinkedList() for _ in range(self.SIZE)] 
         
-    def hash(self, title):
+    def hash(self, title_):
         hsh = 0
-        for c in title:
+        for c in title_:
             hsh += ord(c)
         return hsh%self.SIZE
     
@@ -330,10 +332,12 @@ class Library:
         self.loadMemory(self.MEMDIR)
     
     # Resets entire game Library including LibMem.csv
-    def reset(self):
+    def resetLib(self):
         pass
     
-    
+    # Prints instructions
+    def instructions(self):
+        pass
     
     
     # Searches for single game by user inputted title
@@ -597,14 +601,15 @@ class Library:
         print("1) Search")
         print("2) Add Game")
         print("3) Delete Game")
-        print("4) Print Library")
-        print("5) Reset Library")
-        print("6) Import Library")
-        print("7) Save & Exit Program")
+        print("4) Instructions")
+        print("5) Print Library")
+        print("6) Reset Library")
+        print("7) Import Library")
+        print("8) Save & Exit Program")
         print("###############################")
         
         sel = sinp("Make a Selection: ")
-        if sel.isdigit() and 1 <= int(sel) <= 7:
+        if sel.isdigit() and 1 <= int(sel) <= 8:
             return int(sel)
         else:
             raise InvalidCharacterErr
@@ -614,7 +619,7 @@ class Library:
     def saveAndExit(self):
         exit() 
         
-###################################################################### MAIN BELOW ###################################################################### 
+###################################################################### MAIN ###################################################################### 
 if __name__ == "__main__":
     pass
 
