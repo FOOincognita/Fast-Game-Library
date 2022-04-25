@@ -55,7 +55,7 @@ class Game:
         Returns:
             str: representing a Game's in csv format (FOR DEVELOPER ONLY)
         Usage:
-            gameString = repr(gameVariable) <- returns string formatted like a CSV line for parsing
+            gameString = repr(gameVariable) 
         """
         return f"{self.title},{self.rating},{self.size},{self.price}"
     
@@ -66,7 +66,7 @@ class Game:
             cls: class (automatically passed in)
             line (list): A list parsed by the imported CSV library, or manually using split
         Usage:
-            gameVariable = Game.stog(list) <- returns Game instance populated with data from the list passed in
+            gameVariable = Game.stog(list)
         Returns:
                 Game: instance initialized with data from CSV line
         """
