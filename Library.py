@@ -7,12 +7,12 @@ from utils import DuplicateEntry, EmptyEntry, InvalidSelection
 from colorama import init, Fore as fg, Back as bg, Style as st
 init(autoreset=True)
 
-EMPTYCOLOR = st.BRIGHT + bg.BLACK + fg.RED
+NULLSTR = st.BRIGHT + bg.BLACK + fg.BLUE + "[None]" + st.RESET_ALL
+EMPTYLST = st.BRIGHT + bg.BLACK + fg.RED + "Empty List" + st.RESET_ALL
 ARROW = st.BRIGHT + fg.WHITE + chr(10236) + " "
 
 sinp = lambda x: str(input(x)) 
-gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL
-nullstr = lambda x: ARROW + st.BRIGHT + bg.BLACK + fg.BLUE + str(x) + st.RESET_ALL
+gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL + ARROW
 
 fgtxt = lambda x,y: st.BRIGHT + x + str(y) + st.RESET_ALL
 rtxt = lambda x: fgtxt(fg.RED, x)
@@ -171,9 +171,9 @@ class LinkedList:
         """
         s = ""
         if not len(self): 
-            return EMPTYCOLOR + "Empty List" + st.RESET_ALL
+            return EMPTYLST
         for node in self:
-            s += gmestr(node.data) + (nullstr("[None]") if not node.next else ARROW) 
+            s += gmestr(node.data) + (NULLSTR if not node.next else "") 
         return s
     
     def __delitem__(self, title):
