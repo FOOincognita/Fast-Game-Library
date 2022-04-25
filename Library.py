@@ -598,18 +598,21 @@ class Library:
     # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
     @staticmethod
     def promptMainMenu():
-        print("########## Main Menu ##########")
-        print("1) Search")
-        print("2) Add Game")
-        print("3) Delete Game")
-        print("4) Instructions")
-        print("5) Print Library")
-        print("6) Reset Library")
-        print("7) Import Library")
-        print("8) Save & Exit Program")
-        print("###############################")
-        
-        sel = sinp(ylwtxt("Please Make a Selection: "))
+        sel = ""
+        while not sel:
+            clear()
+            print("########## Main Menu ##########")
+            print("1) Search")
+            print("2) Add Game")
+            print("3) Delete Game")
+            print("4) Instructions")
+            print("5) Print Library")
+            print("6) Reset Library")
+            print("7) Import Library")
+            print("8) Save & Exit Program")
+            print("###############################")
+            sel = sinp(ylwtxt("Please Make a Selection: "))
+            
         if sel.isdigit() and 1 <= int(sel) <= 8:
             return int(sel)
         else:
