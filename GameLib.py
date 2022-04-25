@@ -6,31 +6,32 @@ from utils import InvalidSelection
 from colorama import Fore as fg, Back as bg, Style as st
 
 sinp = lambda x: str(input(str(x)))
-rtxt = lambda x: st.BRIGHT + fg.RED + str(x) + st.RESET_ALL
-ytxt = lambda x: st.BRIGHT + fg.YELLOW + str(x) + st.RESET_ALL
-ctxt = lambda x: st.BRIGHT + fg.CYAN + str(x) + st.RESET_ALL
-gtxt = lambda x: st.BRIGHT + fg.GREEN + str(x) + st.RESET_ALL
-mtxt = lambda x: st.BRIGHT + fg.MAGENTA + str(x) + st.RESET_ALL
+fgtxt = lambda x,y: st.BRIGHT + x + str(y) + st.RESET_ALL
+rtxt = lambda x: fgtxt(fg.RED, x)
+ytxt = lambda x: fgtxt(fg.YELLOW, x)
+ctxt = lambda x: fgtxt(fg.CYAN, x)
+gtxt = lambda x: fgtxt(fg.GREEN, x)
+mtxt = lambda x: fgtxt(fg.MAGENTA, x)
+
 cPrint = lambda x: print(ctxt(str(x)))
 rPrint = lambda x: print(rtxt(str(x)))
 gPrint = lambda x: print(gtxt(str(x)))
 yPrint = lambda x: print(ytxt(str(x)))
 mPrint = lambda x: print(mtxt(str(x)))
-csinp = lambda x: str(input(ctxt(str(x))))
+
 rsinp = lambda x: str(input(rtxt(str(x))))
 ysinp = lambda x: str(input(ytxt(str(x))))
+csinp = lambda x: str(input(ctxt(str(x))))
 gsinp = lambda x: str(input(gtxt(str(x))))
 msinp = lambda x: str(input(mtxt(str(x))))
 
 ########## Global Constants ##########
 T = True
 F = False
-
 ########## Global Functions ##########
 
 # Clears terminal screen on Win, Mac, & Linux
-def clear():
-    system('cls||clear')
+def clear(): system('cls||clear')
     
 def safeExit():
     clear()

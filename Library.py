@@ -12,10 +12,22 @@ NULLCOLOR = st.BRIGHT + bg.BLACK + fg.BLUE
 EMPTYCOLOR = st.BRIGHT + bg.BLACK + fg.RED
 ARROW = chr(10236) + " "
 
-sinp = lambda x: str(input(x)) # <- "response = sinp("Enter input: ")" is the exact same as "response = str(input("Enter input: "))"
+sinp = lambda x: str(input(x)) 
 gmestr = lambda x:  GAMECOLOR + str(x) + st.RESET_ALL
 nullstr = lambda x: ARROW + NULLCOLOR + str(x) + st.RESET_ALL
-ylwtxt = lambda x: st.BRIGHT + fg.YELLOW + str(x) + st.RESET_ALL
+
+fgtxt = lambda x,y: st.BRIGHT + x + str(y) + st.RESET_ALL
+rtxt = lambda x: fgtxt(fg.RED, x)
+ytxt = lambda x: fgtxt(fg.YELLOW, x)
+ctxt = lambda x: fgtxt(fg.CYAN, x)
+gtxt = lambda x: fgtxt(fg.GREEN, x)
+mtxt = lambda x: fgtxt(fg.MAGENTA, x)
+
+rsinp = lambda x: str(input(rtxt(str(x))))
+ysinp = lambda x: str(input(ytxt(str(x))))
+csinp = lambda x: str(input(ctxt(str(x))))
+gsinp = lambda x: str(input(gtxt(str(x))))
+msinp = lambda x: str(input(mtxt(str(x))))
 
 ########## Global Constants ##########
 T = True
@@ -646,7 +658,7 @@ class Library:
             print("7) Import Library")
             print("8) Save & Exit Program")
             print("#"*30)
-            sel = sinp(ylwtxt("Please Make a Selection: "))
+            sel = ysinp("Please Make a Selection: ")
             
         if sel.isdigit() and 1 <= int(sel) <= 8:
             return int(sel)
