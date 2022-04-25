@@ -29,38 +29,13 @@ def clear():
 
 ###################################################################### GAME CLASS ###################################################################### 
 class Game:
-    """
-    Each instance represents a single Game
-        Usage:
-            Access data:
-                Gtitle_ = gameVariable.title <- sets Gtitle_ equal to string containing title of Game
-
+    """ Each instance represents a single Game
+    
     Attributes:
         title (str, optional): Game Title. Defaults to "N/A".
         rating (str, optional): Game Rating. Defaults to "N/A".
         size (str, optional): Game size (in GB). Defaults to "N/A".
         price (str, optional): Game Price (in $). Defaults to "N/A".
-        
-    Instance Methods:
-        __str__(self): 
-            Returns:
-                str: representing a Game's attributes
-                
-        __repr__(self): 
-            Returns:
-                str: representing a Game's in csv format (FOR DEVELOPER ONLY)
-            Usage:
-                gameString = repr(gameVariable) <- returns string formatted like a CSV line for parsing
-        
-    Class Methods:
-        stog(cls, line): Secondary Constructor  
-            Args:
-                cls: class (automatically passed in)
-                line (list): A list parsed by the imported CSV library, or manually using split
-            Usage:
-                gameVariable = Game.stog(list) <- returns Game instance populated with data from the list passed in
-            Returns:
-                Game: instance initialized with data from CSV line
     """
     def __init__(self, title="N/A", rating="N/A", size="N/A", price="N/A"):
         self.title = title
@@ -69,122 +44,121 @@ class Game:
         self.price = price
     
     def __str__(self):
+        """ Formats Game instnace to str 
+        Returns:
+                str: representing a Game's attributes
+        """
         return f"[{self.title},{self.rating},{self.size},{self.price}]"
     
     def __repr__(self):
+        """ Formats Game instance to CSV style string
+        Returns:
+            str: representing a Game's in csv format (FOR DEVELOPER ONLY)
+        Usage:
+            gameString = repr(gameVariable) <- returns string formatted like a CSV line for parsing
+        """
         return f"{self.title},{self.rating},{self.size},{self.price}"
     
     @classmethod
     def stog(cls, line):
+        """ Secondary Constructor  
+        Args:
+            cls: class (automatically passed in)
+            line (list): A list parsed by the imported CSV library, or manually using split
+        Usage:
+            gameVariable = Game.stog(list) <- returns Game instance populated with data from the list passed in
+        Returns:
+                Game: instance initialized with data from CSV line
+        """
         return cls(*line)
 
 
 ###################################################################### NODE CLASS ###################################################################### 
 
 class Node:
-    """ [YOU CAN IGNORE THIS CLASS]
-    Represents a single Node in a Linked List
+    """ Represents a single Node in a Linked List
     
     Attributes:
         Data (Game, optional): Game stored in the Node. Defaults to None.
         Next (Node, optional): Contains the next Node in the Linked List. Defaults to None.
-        
-    Instance Methods:
-        __str__(self): 
-            Usage:
-                str(node1)
-            Returns:
-                str: Represents a Node's attributes
-                
-        getTitle(self):
-            Usage:
-                node1.getTitle()
-            Returns:
-                str: title of the Game stored in the Node
     """
     def __init__(self, data=None, next=None):
         self.data = data
         self.next = next
         
     def getTitle(self):
+        """ Gets the title of a game within a Node's data attribute
+        Usage:
+            node1.getTitle()
+        Returns:
+            str: title of the Game stored in the Node
+        """
         return self.data.title
     
     def __str__(self):
+        """ Formats a Node to a string
+        Usage:
+            str(node1)
+        Returns:
+            str: Represents a Node's attributes
+        """
         return str(self.data)
     
     
 ###################################################################### LINKEDLIST CLASS ###################################################################### 
 
 class LinkedList:
-    """ [YOU CAN IGNORE THIS CLASS]
-    Linked List used in Hash Table to implement chaining method for handling collisions 
+    """ Linked List used in Hash Table to implement chaining method for handling collisions 
     
     Attributes:
         head (Node): Contains the first Node in a Linked List. Always initialized to None.
-        
-    Instance Methods:
-        __iter__(self): Allows Linked List to be iterable (in for loops)
-            yields:
-                class iterator
-        
-        __contains__(self, title): Checks if game is in Linked List by title
-            Args:
-                title (str): Title of game
-            Usage:
-                if title in LinkedList1
-            Returns:
-                Bool: True if a Game obj with the passed in title is present in the linked list
-                
-        __len__(self): Length of Linked List
-            Usage:
-                len(linkedlist1)
-            Returns:
-                int: Number of non-None Nodes in Linked List
-                
-        __str__(self): 
-            Usage:
-                str(linkedlist1)
-            Returns:
-                str: representing a Linked List 
-                
-        __delitem__(self, title): Deletes specified game in Linked List
-            Args:
-                title (str): Title of game to delete
-            Usage:
-                del linkedlist1[title] 
-            Exceptions:
-                InvalidAccessErr: When title is not present in Linked List
-                
-        emplace_back(self, game_): Constructs new Node, appends it to end of Linked List
-            Args:
-                game_ (Game): Game instance to add to Linked List
-            Usage:
-                linkedlist1.emplace_back(Game) 
-            Exceptions:
-                DuplicateEntry: When Game with same title already exists in Linked List
     """
     def __init__(self):
         self.head = None
         
     def __iter__(self):
+        """ Allows Linked List to be iterable (e.g. in for loops)
+        yields:
+            iterator: Next Node in list (Node.next), if any
+        """
         curr = self.head
         while curr:
             yield curr
             curr = curr.next
             
-    def __contains__(self, title):
+    def __contains__(self, title_):
+        """ Checks if game is in Linked List by title
+        Args:
+            title (str): Title of game
+        Usage:
+            if title in LinkedListInstance: Do something
+        Returns:
+            Bool: True if a Game obj with the passed in title is present in the linked list
+        """
         for node in self:
-            if node.getTitle() == title:
+            if node.getTitle() == title_:
                 return True
         return False
         
     def __len__(self): 
+        """ Length of Linked List
+        Usage:
+            len(linkedlistInstance)
+        Returns:
+            int: Number of non-None Nodes in Linked List
+        """
         i = 0
         for node in self:
             i += 1
         return i
     
     def __str__(self):
+        """ Returns string representing Linked List
+        Usage:
+            str(linkedlistInstance)
+        Returns:
+            str: representing a Linked List 
+        """
         s = ""
         if not len(self): 
             return EMPTYCOLOR + "Empty List" + st.RESET_ALL
@@ -193,6 +167,14 @@ class LinkedList:
         return s
     
     def __delitem__(self, title):
+        """ Deletes specified game in Linked List
+        Args:
+            title (str): Title of game to delete
+        Usage:
+            del linkedlistInstance[title] 
+        Raises:
+            InvalidAccessErr: When title is not present in Linked List
+        """
         if not len(self) or title not in self: 
             raise InvalidAccessErr
         elif self.head.getTitle() == title:
@@ -210,6 +192,14 @@ class LinkedList:
                     return 
 
     def emplace_back(self, game_):
+        """ Constructs new Node, appends it to end of Linked List
+        Args:
+            game_ (Game): Game instance to add to Linked List
+        Usage:
+            linkedlistInstance.emplace_back(Game) 
+        Exceptions:
+            DuplicateEntry: When Game with same title already exists in Linked List
+        """
         if not len(self):
             self.head = Node(game_)
             return
@@ -224,73 +214,41 @@ class LinkedList:
 ###################################################################### HASHTABLE CLASS ###################################################################### 
 
 class HashTable:
-    """ [IMPORTANT]: Library's self.dataBase attribute is a HashTable (basically a dictionary)
-    Hash Table data structure which contains all Games in Library. Uses Linked Lists for chaining to handle collisions
+    """ Hash Table data structure which contains all Games in Library. Uses Linked Lists for chaining to handle collisions
     
     Attributes:
         SIZE (int, optional): Number of linked Lists within arr. Defaults to 50
         arr (list): list containing LinkedLists
-        
-    Instance Methods:
-        hash(self, title_): Generates hashed index based on the summation of ASCII values in key; AKA Hash Function
-            Args:
-                title_ (str): title of Game instance
-            Usage:
-                hashValue = self.hash(title_) or hashValue = HashTableInstance.hash(title_)
-            Returns:
-                int: hashed integer in interval [0,self.SIZE]
-        
-        __setitem__(self, title_, game_): Inserts Game object into HashTable
-            Args:
-                title_ (str): Title of game
-                game_ (str): Game instance
-            Usage:
-                HashTableVariable[title_] = game_
-            Exceptions:
-                EmptyEntry: When a Game instnace has title "N/A" or ""
-                DuplicateEntry: When a Game with same title is already in HashTable
-                
-        __getitem__(self, title_): Length of Linked List
-            Args:
-                title_ (str): title of Game instance
-            Usage:
-                gameVariable = HashTableVariable[title_]
-            Returns:
-                Game: Game instnace with specified title (if one exists in HashTable instance)
-            Exceptions:
-                InvalidAccessErr: When a Game with passed title is not in Hash Table
-                
-        __str__(self): Formats table to str
-            Usage:
-                str(self) or str(HashTableVariable)
-            Returns:
-                str: representing a Hash Table
-                
-        __delitem__(self, title_): Deletes specified game in Hash Table
-            Args:
-                title_ (str): Title of Game to delete
-            Usage:
-                del HashTableVariable[title_] 
-            Exceptions:
-                InvalidAccessErr: When title is not present in Linked List
-                
-        __len__(self): Gets Number of Games in Hash Table
-            Usage:
-                length = len(HashTableVariable) or length = len(self)
-            Returns:
-                int: Number of Games in HashTable
     """
     def __init__(self, size=50):
         self.SIZE = size
         self.arr = [LinkedList() for _ in range(self.SIZE)] 
         
     def hash(self, title_):
+        """ Generates hashed index for self.arr placement based on the summation of ASCII values in key; AKA Hash Function
+        Args:
+            title_ (str): title of Game instance
+        Usage:
+            hashValue = self.hash(title_) 
+        Returns:
+            int: hashed integer in interval [0,self.SIZE]
+        """
         hsh = 0
         for c in title_:
             hsh += ord(c)
         return hsh%self.SIZE
     
     def __setitem__(self, title_, game_):
+        """ Inserts Game object into HashTable
+        Args:
+            title_ (str): Title of game
+            game_ (str): Game instance
+        Usage:
+            HashTableInstance[title_] = game_
+        Exceptions:
+            EmptyEntry: When a Game instnace has title "N/A" or ""
+            DuplicateEntry: When a Game with same title is already in HashTable
+        """
         if not len(title_) or title_ == "N/A":
             raise EmptyEntry
         if title_ in self.arr[self.hash(title_)]:
@@ -299,21 +257,51 @@ class HashTable:
             self.arr[self.hash(title_)].emplace_back(game_)
         
     def __getitem__(self, title_):
+        """ Gets Game at hashed index if it exists
+        Args:
+            title_ (str): title of Game instance
+        Usage:
+            gameInstance = HashTableInstance[title_]
+        Returns:
+            Game: Game instnace with specified title (if one exists in HashTable instance)
+        Raises:
+            InvalidAccessErr: When a Game with passed title is not in Hash Table
+        """
         for node in self.arr[self.hash(title_)]:
             if node.getTitle() == title_: 
                 return node.data
         raise InvalidAccessErr
             
     def __delitem__(self, title_):
+        """ Deletes specified game in Hash Table (by title)
+        Args:
+            title_ (str): Title of Game to delete
+        Usage:
+            del HashTableInstance[title_] 
+        Raises:
+            InvalidAccessErr: When title is not present in Linked List
+        """
         del self.arr[self.hash(title_)][title_] 
         
     def __str__(self):
+        """ Formats hash table to str (shows contents & links)
+        Usage:
+            str(self) or str(HashTableInstance)
+        Returns:
+            str: representing a Hash Table
+        """
         table = ""
         for ll in self.arr:
             table += str(ll) + "\n"
         return table
             
     def __len__(self): 
+        """ Gets Number of Games in Hash Table
+        Usage:
+            length = len(HashTableVariable) or length = len(self)
+        Returns:
+            int: Number of Games in HashTable
+        """
         i = 0
         for ll in self.arr:
             i += len(ll)
@@ -324,6 +312,13 @@ class HashTable:
     
 # Serves as the highest abstract data type (class), which contains the game database (Hash Table)
 class Library:
+    """ Represents the Game library; wrapper for data structures
+    
+    Attributes:
+        size (int, optional): size of the dataBase. Defaults to 50
+        dataBase (HashTable): Hash Table which contains all stored Games
+        MEMDIR (str): Directory of persistent memory file
+    """
     
     def __init__(self, size=50):
         self.size = size
@@ -334,6 +329,7 @@ class Library:
     
     # Resets entire game Library including LibMem.csv
     def resetLib(self):
+        """Prompts user Y/N if they want to erase all Game permanently"""
         while T:
             clear()
             print("\n[WARNING]: Resetting the library will delete all games in memory forever!\n")
@@ -355,6 +351,7 @@ class Library:
     
     # Prints instructions
     def instructions(self):
+        """Prints Instructions"""
         clear()
         print("#"*22 + " Instructions " + "#"*22)
         print("This library uses a HashTable to store & reterieve games\n& their data in constant time (Instantly).", end="")
@@ -581,6 +578,10 @@ class Library:
     # Dunder str(); Formats Library's HashTable (dataBase) to printable form
     # Usage str(Library_Instance_Name)
     def __str__(self):
+        """ Casts Library Instance to string
+        Returns:
+            str: a string representing the underlying HashTable Instnace
+        """
         return str(self.dataBase)
     
     
@@ -625,6 +626,12 @@ class Library:
     # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
     @staticmethod
     def promptMainMenu():
+        """ Prompts main menu; grabs user input with error checking
+        Raises:
+            InvalidSelection: When user inputs anything other than an int in [1,8]
+        Returns:
+            int: user input (menu selection)
+        """
         sel = ""
         while not sel:
             clear()
