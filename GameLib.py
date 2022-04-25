@@ -1,9 +1,9 @@
 from decimal import InvalidOperation
-from os import _exit, system 
+from os import system 
 from time import sleep
 from Library import Library
-from utils import EmptyEntry, InvalidSelection
-from colorama import init, Fore as fg, Back as bg, Style as st
+from utils import InvalidSelection
+from colorama import Fore as fg, Back as bg, Style as st
 
 sinp = lambda x: str(input(str(x)))
 rtxt = lambda x: st.BRIGHT + fg.RED + str(x) + st.RESET_ALL

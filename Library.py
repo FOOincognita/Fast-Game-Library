@@ -571,7 +571,7 @@ class Library:
              
                     response = sinp("Press Enter to go back: ") 
                 
-            What user should see (Library with a size of 3, & only 1 game has been added):
+            What user should see if the Library has a size of 3, & contains 1 game; game may appear in a different order):
             
                     Empty List
                     [CoD, 2.2, 10GB, $40]->[None]
