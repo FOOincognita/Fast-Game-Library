@@ -23,7 +23,7 @@ class TestLibrary(uni.TestCase):
         self.testStrGame2 = Game("", "", "", "")
         self.testStrGame3 = Game()
         
-        self.testStogGame = Game.stog("GameStog,10,80GB,$50\n")
+        self.testStogGame = Game.stog(["GameStog","10","80GB","$50"])
         
         # test_LL objects
         self.testLLstr1 = LinkedList()

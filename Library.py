@@ -1,20 +1,18 @@
 ########## Libraries ##########
 import os
-import csv # You can use this to work with .csv files, but that's up to you
-from time import sleep # Calling sleep(3) will make the program pause for 3 seconds
+import csv 
+from time import sleep 
 from xml.dom import InvalidAccessErr, InvalidCharacterErr
 from utils import DuplicateEntry, EmptyEntry, InvalidSelection
 from colorama import init, Fore as fg, Back as bg, Style as st
 init(autoreset=True)
 
-GAMECOLOR = st.BRIGHT + bg.BLACK + fg.GREEN
-NULLCOLOR = st.BRIGHT + bg.BLACK + fg.BLUE
 EMPTYCOLOR = st.BRIGHT + bg.BLACK + fg.RED
-ARROW = chr(10236) + " "
+ARROW = st.BRIGHT + fg.WHITE + chr(10236) + " "
 
 sinp = lambda x: str(input(x)) 
-gmestr = lambda x:  GAMECOLOR + str(x) + st.RESET_ALL
-nullstr = lambda x: ARROW + NULLCOLOR + str(x) + st.RESET_ALL
+gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL
+nullstr = lambda x: ARROW + st.BRIGHT + bg.BLACK + fg.BLUE + str(x) + st.RESET_ALL
 
 fgtxt = lambda x,y: st.BRIGHT + x + str(y) + st.RESET_ALL
 rtxt = lambda x: fgtxt(fg.RED, x)
@@ -457,6 +455,7 @@ class Library:
                 Read in a CSV or txt file line-by-line (assume txt/csv are formatted as a CSV)
                     - For each line, split into a list of 4 strings for each piece of data ([title, rating, size, price]) then pass the 
                             resulting list into the class method Game.stog(list goes here), which will return a Game instance (See Game Docstring for more info)
+                        + ENSURE THE STRINGS IN THE LIST DO NOT CONTAIN NEWLINES OR EXTRA SPACES ANYWHERE
                     - Add Game to self.dataBase (You can use GameVar.title to access the title of the game)
                         + See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
                     NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-except-else block (see #resources channel)
@@ -673,6 +672,5 @@ class Library:
 ###################################################################### MAIN ###################################################################### 
 if __name__ == "__main__":
     pass
-
 
 # Function Signup Sheet: https://docs.google.com/spreadsheets/d/1FHZYT3ugd7z8yNfNrpPMC92HNbMRgKagbsxZSr7g1Bs/edit?usp=sharing
