@@ -2,7 +2,7 @@ import utils
 import unittest as uni
 from utils import DuplicateEntry, EmptyEntry
 from xml.dom import InvalidAccessErr
-from Library import Game, Node, LinkedList, HashTable, Library
+from Library import EMPTYLST, Game, Node, LinkedList, HashTable, Library
 from colorama import init, Fore as fg, Back as bg, Style as st
     # Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
     # Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
@@ -39,6 +39,7 @@ class TestLibrary(uni.TestCase):
         
         # test_HT object
         self.testHT = HashTable(10)
+        self.htTst = HashTable(1)
 
 
     
@@ -74,7 +75,6 @@ class TestLibrary(uni.TestCase):
         except(DuplicateEntry):
             threw1 = True
         self.assertTrue(threw1, FAIL)
-        
         
     # Tests LinkedList::__len__() dunder method 
     def test_LLLen(self):
@@ -118,20 +118,15 @@ class TestLibrary(uni.TestCase):
             threw2 = True
         self.assertTrue(threw2, FAIL)
         
-        
-        
     # Tests LinkedList::__iter__() dunder method 
     def test_LLIter(self):
         testStr = ""
         self.testLLstr1.emplace_back(self.testStrGame1)
         self.testLLstr1.emplace_back(self.testStrGame2)
         self.testLLstr1.emplace_back(self.testStrGame3)
-        
         for n in self.testLLstr1:
             testStr += str(n)
-            
         self.assertEqual(testStr, "[Game1,5,40GB,$20][,,,][N/A,N/A,N/A,N/A]", FAIL)
-        
         
         
         
@@ -144,7 +139,6 @@ class TestLibrary(uni.TestCase):
         self.assertTrue(hshnetest != hsh, FAIL)
         hshtest2 = self.testHT.hash("abcDtF")
         self.assertTrue(hshtest2 == hsh, FAIL)
-            
     
     # Tests HashTable::__str__() dunder method with empty table
     def test_HTStr(self):
@@ -153,7 +147,6 @@ class TestLibrary(uni.TestCase):
         for i in range(10):
             testStr += emtLst("Empty List") + "\n"
         self.assertEqual(str(self.testHT), testStr, FAIL)
-        
     
     # Tests HashTable::__set/getitem__() dunder method 
     def test_HTSetItem(self):
@@ -173,8 +166,29 @@ class TestLibrary(uni.TestCase):
         self.assertTrue(except1, FAIL)
         self.assertTrue(except2, FAIL)
         
+    # Tests HashTable::__del__() dunder method 
+    def test_HTDelItem(self):
+        raised = False
+        try: del self.htTst["invalidtitle"]
+        except(InvalidAccessErr): raised = True
+        self.assertTrue(raised, FAIL)
+        
+        self.htTst[self.testStrGame1.title] = self.testStrGame1
+        del self.htTst[self.testStrGame1.title]
+        self.assertEqual(str(self.htTst), EMPTYLST + "\n", FAIL)
+        
+    # Tests HashTable::__len__() dunder method 
+    def test_HTDelItem(self):
+        self.assertEqual(len(self.htTst), 0, FAIL)
+        self.htTst[self.testStrGame1.title] = self.testStrGame1
+        self.assertEqual(len(self.htTst), 1, FAIL)
+        self.htTst[self.testStogGame.title] = self.testStogGame
+        self.assertEqual(len(self.htTst), 2, FAIL)
+        del self.htTst[self.testStrGame1.title]
+        del self.htTst[self.testStogGame.title]
+        self.assertEqual(len(self.htTst), 0, FAIL)
         
         
 if __name__ == "__main__":
-    uni.main()
+    uni.main(verbosity=2)
     
