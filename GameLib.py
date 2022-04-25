@@ -94,7 +94,7 @@ if __name__ == "__main__":
         else:
             try:
                 match (sel):
-                    case 0: raise InvalidOperation(rtxt("case 0 matched"))
+                    case 0: raise InvalidOperation(rtxt("case 0 matched")) # REMOVE BEFORE DEPLOYMENT
                     case 1: lib.search()
                     case 2: lib.addGame()
                     case 3: lib.delGame()
