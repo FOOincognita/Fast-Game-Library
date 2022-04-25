@@ -416,10 +416,12 @@ class Library:
     
         
     # Loads in persistent memory stored in self.MEMDIR
+    # TODO: IMPLEMNET
     def loadMemory(self):
         pass
     
     # Writes newly added game(s) to MEMDIR file upon save & exit call
+    # TODO: IMPLEMENT
     def writeMemory(self, game_):
         pass
         
@@ -576,7 +578,6 @@ class Library:
     
     
     # Dunder str(); Formats Library's HashTable (dataBase) to printable form
-    # Usage str(Library_Instance_Name)
     def __str__(self):
         """ Casts Library Instance to string
         Returns:
