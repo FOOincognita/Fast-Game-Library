@@ -322,23 +322,50 @@ class HashTable:
     
 ###################################################################### LIBRARY CLASS ###################################################################### 
     
-# Serves as the highest abstract data type (class), which contains the game database 
+# Serves as the highest abstract data type (class), which contains the game database (Hash Table)
 class Library:
     
-    def __init__(self, size=50, mem="LibMem.csv"):
+    def __init__(self, size=50):
+        self.size = size
         self.dataBase = HashTable(size)   
-        self.printable = [] # Stores titles of Games in lexicographical order for printing
-        self.MEMDIR = mem
+        self.MEMDIR = "LibMem.csv"
         
         self.loadMemory()
     
     # Resets entire game Library including LibMem.csv
     def resetLib(self):
-        pass
+        while T:
+            clear()
+            print("\n[WARNING]: Resetting the library will delete all games in memory forever!\n")
+            sleep(1)
+            selYN = sinp("\nAre you sure you want to delete all games [Y/N]?\n").strip().upper()
+            if len(selYN) == 1 and selYN.isalpha() and selYN in ["Y","N"]:
+                match selYN:
+                    case "N": return
+                    case "Y": 
+                        open(self.MEMDIR, 'w').close() 
+                        self.dataBase = HashTable(self.size)
+                        print("\nLibrary Successfully Reset!\n")
+                        sinp("Press Enter to Continue")
+                        return
+            else:
+                clear()
+                print("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
+                sleep(3)
     
     # Prints instructions
     def instructions(self):
-        pass
+        clear()
+        print("#"*22 + " Instructions " + "#"*22)
+        print("This library uses a HashTable to store & reterieve games\n& their data in constant time (Instantly).", end="")
+        print(" Lists, which\nare normally used to store indexable data, take linear\ntime (proportional to number of games stored).\n")
+        print("In this library, you can search, add games, delete games,\ncombine the existing library with a file containing\nentries,", end="")
+        print("print the library, reset the library, then save\n& exit whenever you're done.\n")
+        print("Whenever you exit, your games will be saved in memory,\nmeaning they'll still be in the libary for next time.\n")
+        print("Instructions for this software are always on screen; don't worry.\n")
+        print("#"*57)
+        sinp("Press Enter to Return")
+        return
     
     
     # Searches for single game by user inputted title
@@ -601,7 +628,7 @@ class Library:
         sel = ""
         while not sel:
             clear()
-            print("########## Main Menu ##########")
+            print("#"*10 + " Main Menu " + "#"*10)
             print("1) Search")
             print("2) Add Game")
             print("3) Delete Game")
@@ -610,7 +637,7 @@ class Library:
             print("6) Reset Library")
             print("7) Import Library")
             print("8) Save & Exit Program")
-            print("###############################")
+            print("#"*30)
             sel = sinp(ylwtxt("Please Make a Selection: "))
             
         if sel.isdigit() and 1 <= int(sel) <= 8:
