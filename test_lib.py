@@ -1,5 +1,7 @@
 import utils
 import unittest as uni
+from io import StringIO
+from unittest.mock import patch
 from utils import DuplicateEntry, EmptyEntry
 from xml.dom import InvalidAccessErr
 from Library import EMPTYLST, Game, Node, LinkedList, HashTable, Library
@@ -21,7 +23,7 @@ emtLst = lambda x: EMPTYCOLOR + str(x) + st.RESET_ALL
 
 fgc = lambda x,y: x + y 
 
-class TestLibrary(uni.TestCase):
+class TestDataStructs(uni.TestCase):
     
     # Runs before each test
     def setUp(self):
@@ -37,11 +39,14 @@ class TestLibrary(uni.TestCase):
         self.testLLstr1 = LinkedList()
         self.testLLstr2 = LinkedList()
         
-        # test_HT object
+        # test_HT objects
         self.testHT = HashTable(10)
         self.htTst = HashTable(1)
-
-
+        
+        # test_Lib object
+        self.tLib = Library(3)
+        
+        
     
     # Tests Game::__str__() dunder method 
     def test_strGame(self):
@@ -186,8 +191,8 @@ class TestLibrary(uni.TestCase):
         self.assertEqual(len(self.htTst), 2, FAIL)
         del self.htTst[self.testStrGame1.title]
         del self.htTst[self.testStogGame.title]
-        self.assertEqual(len(self.htTst), 0, FAIL)
-        
+        self.assertEqual(len(self.htTst), 0, FAIL) 
+
         
         
 if __name__ == "__main__":
