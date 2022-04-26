@@ -339,7 +339,7 @@ class Library:
     
     # Resets entire game Library including LibMem.csv
     def resetLib(self):
-        """Prompts user Y/N if they want to erase all Game permanently"""
+        """ Prompts user Y/N if they want to erase all Game permanently """
         while T:
             clear()
             print("\n[WARNING]: Resetting the library will delete all games in memory forever!\n")
