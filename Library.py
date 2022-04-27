@@ -625,7 +625,7 @@ class Library:
                 + do NOT use str(self.dataBase)
             Print a newline, then prompt user for input using (see sinp at very top of file):
              
-                    response = sinp("Press Enter to go back: ") 
+                    sinp("Press Enter to go back: ") 
                 
             What user should see if the Library has a size of 3, & contains 1 game; game may appear in a different order):
             
