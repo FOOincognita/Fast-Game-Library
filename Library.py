@@ -99,7 +99,7 @@ class Node:
     def title(self):
         """ Gets the title of a game within a Node's data attribute
         Usage:
-            node1.getTitle()
+            node1.title 
         Returns:
             str: title of the Game stored in the Node
         """
@@ -689,3 +689,4 @@ if __name__ == "__main__":
     pass
 
 # Function Signup Sheet: https://docs.google.com/spreadsheets/d/1FHZYT3ugd7z8yNfNrpPMC92HNbMRgKagbsxZSr7g1Bs/edit?usp=sharing
+
