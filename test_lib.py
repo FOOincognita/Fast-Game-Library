@@ -4,7 +4,7 @@ from io import StringIO
 from unittest.mock import patch
 from utils import DuplicateEntry, EmptyEntry
 from xml.dom import InvalidAccessErr
-from Library import EMPTYLST, Game, Node, LinkedList, HashTable, Library
+from Library import Game, Node, LinkedList, HashTable, Library
 from colorama import init, Fore as fg, Back as bg, Style as st
     # Fore: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
     # Back: BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE, RESET.
@@ -13,13 +13,11 @@ init(autoreset=True)
 
 FAIL = st.BRIGHT + fg.RED + "[ FAIL ]"
 
-EMPTYCOLOR = st.BRIGHT + bg.BLACK + fg.RED
+NULLSTR = st.BRIGHT + bg.BLACK + fg.BLUE + "[None]" + st.RESET_ALL
 ARROW = st.BRIGHT + fg.WHITE + chr(10236) + " "
 
 sinp = lambda x: str(input(x)) 
 gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL + ARROW
-nullstr = lambda x: st.BRIGHT + bg.BLACK + fg.BLUE + str(x) + st.RESET_ALL
-emtLst = lambda x: EMPTYCOLOR + str(x) + st.RESET_ALL
 
 fgc = lambda x,y: x + y 
 
@@ -63,17 +61,17 @@ class TestDataStructs(uni.TestCase):
         
     # Tests LinkedList::__str__() dunder method 
     def test_LLStr(self):
-        self.assertEqual(str(self.testLLstr1), emtLst("Empty List"), FAIL)
+        self.assertEqual(str(self.testLLstr1), NULLSTR, FAIL)
         
     # Tests LinkedList::emplace_back() method 
     def test_LLEmplace_Back(self):
         threw1 = False
         self.testLLstr1.emplace_back(self.testStrGame1)
-        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + nullstr("[None]"), FAIL)
+        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + NULLSTR, FAIL)
         self.testLLstr1.emplace_back(self.testStrGame2)
-        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + gmestr("[,,,]") + nullstr("[None]"), FAIL)
+        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + gmestr("[,,,]") + NULLSTR, FAIL)
         self.testLLstr1.emplace_back(self.testStrGame3)
-        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + gmestr("[,,,]") + gmestr("[N/A,N/A,N/A,N/A]") + nullstr("[None]"), FAIL)
+        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + gmestr("[,,,]") + gmestr("[N/A,N/A,N/A,N/A]") + NULLSTR, FAIL)
         
         try:
             self.testLLstr1.emplace_back(self.testStrGame1)
@@ -97,17 +95,17 @@ class TestDataStructs(uni.TestCase):
         self.testLLstr1.emplace_back(self.testStrGame1)
         del self.testLLstr1[self.testStrGame1.title]
         self.assertEqual(len(self.testLLstr1), 0, FAIL) ######### 0
-        self.assertEqual(str(self.testLLstr1), emtLst("Empty List"), FAIL)
+        self.assertEqual(str(self.testLLstr1), NULLSTR, FAIL)
         
         self.testLLstr1.emplace_back(self.testStrGame2)
         self.testLLstr1.emplace_back(self.testStrGame3)
         del self.testLLstr1[self.testStrGame2.title]
         self.assertEqual(len(self.testLLstr1), 1, FAIL)
-        self.assertEqual(str(self.testLLstr1), gmestr("[N/A,N/A,N/A,N/A]") + nullstr("[None]"), FAIL)
+        self.assertEqual(str(self.testLLstr1), gmestr("[N/A,N/A,N/A,N/A]") + NULLSTR, FAIL)
         
         del self.testLLstr1[self.testStrGame3.title]
         self.assertEqual(len(self.testLLstr1), 0, FAIL)
-        self.assertEqual(str(self.testLLstr1), emtLst("Empty List"), FAIL)
+        self.assertEqual(str(self.testLLstr1), NULLSTR, FAIL)
         
         try:
             del self.testLLstr1[self.testStrGame2.title]
@@ -150,7 +148,7 @@ class TestDataStructs(uni.TestCase):
         testStr = ""
         
         for i in range(10):
-            testStr += emtLst("Empty List") + "\n"
+            testStr += NULLSTR + "\n"
         self.assertEqual(str(self.testHT), testStr, FAIL)
     
     # Tests HashTable::__set/getitem__() dunder method 
@@ -184,7 +182,7 @@ class TestDataStructs(uni.TestCase):
         
         self.htTst[self.testStrGame1.title] = self.testStrGame1
         del self.htTst[self.testStrGame1.title]
-        self.assertEqual(str(self.htTst), EMPTYLST + "\n", FAIL)
+        self.assertEqual(str(self.htTst), NULLSTR + "\n", FAIL)
         
     # Tests HashTable::__len__() dunder method 
     def test_HTDelItem(self):

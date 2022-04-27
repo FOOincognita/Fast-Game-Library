@@ -8,7 +8,6 @@ from colorama import init, Fore as fg, Back as bg, Style as st
 init(autoreset=True)
 
 NULLSTR = st.BRIGHT + bg.BLACK + fg.BLUE + "[None]" + st.RESET_ALL
-EMPTYLST = st.BRIGHT + bg.BLACK + fg.RED + "Empty List" + st.RESET_ALL
 ARROW = st.BRIGHT + fg.WHITE + chr(10236) + " "
 
 sinp = lambda x: str(input(x)) 
@@ -96,7 +95,8 @@ class Node:
         self.data = data
         self.next = next
         
-    def getTitle(self):
+    @property
+    def title(self):
         """ Gets the title of a game within a Node's data attribute
         Usage:
             node1.getTitle()
@@ -146,7 +146,7 @@ class LinkedList:
             Bool: True if a Game obj with the passed in title is present in the linked list
         """
         for node in self:
-            if node.getTitle() == title_:
+            if node.title == title_:
                 return True
         return False
         
@@ -187,14 +187,14 @@ class LinkedList:
         """
         if not len(self) or title not in self: 
             raise InvalidAccessErr
-        elif self.head.getTitle() == title:
+        elif self.head.title == title:
             self.head = self.head.next
             return 
         else:
             for node in self:
                 if node.next is None: 
                     raise InvalidAccessErr
-                if node.next.getTitle() == title:
+                if node.next.title == title:
                     if node.next.next:
                         node.next = node.next.next
                     else: 
@@ -278,7 +278,7 @@ class HashTable:
             InvalidAccessErr: When a Game with passed title is not in Hash Table
         """
         for node in self.arr[self.hash(title_)]:
-            if node.getTitle() == title_: 
+            if node.title == title_: 
                 return node.data
         raise InvalidAccessErr
             
