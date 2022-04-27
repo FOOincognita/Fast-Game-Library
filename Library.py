@@ -359,7 +359,8 @@ class Library:
                 sleep(3)
     
     # Prints instructions
-    def instructions(self):
+    @staticmethod
+    def instructions():
         """Prints Instructions"""
         clear()
         print("#"*22 + " Instructions " + "#"*22)

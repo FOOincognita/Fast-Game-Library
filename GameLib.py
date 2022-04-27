@@ -99,7 +99,7 @@ if __name__ == "__main__":
                     case 1: lib.search()
                     case 2: lib.addGame()
                     case 3: lib.delGame()
-                    case 4: lib.instructions()
+                    case 4: Library.instructions()
                     case 5: lib.printLib()
                     case 6: lib.resetLib()
                     case 7: lib.importGames()
