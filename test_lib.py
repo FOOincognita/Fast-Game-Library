@@ -163,10 +163,14 @@ class TestDataStructs(uni.TestCase):
                     found1 = True
         self.assertTrue(found1, FAIL)
         
-        try: self.testHT[self.testStrGame1.title] = self.testStrGame1
-        except(DuplicateEntry): except2 = True
-        try: self.testHT[self.testStrGame3.title] = self.testStrGame3
-        except(EmptyEntry): except1 = True
+        try: 
+            self.testHT[self.testStrGame1.title] = self.testStrGame1
+        except(DuplicateEntry): 
+            except2 = True
+        try: 
+            self.testHT[self.testStrGame3.title] = self.testStrGame3
+        except(EmptyEntry): 
+            except1 = True
         
         self.assertTrue(except1, FAIL)
         self.assertTrue(except2, FAIL)

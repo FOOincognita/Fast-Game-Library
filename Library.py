@@ -171,7 +171,7 @@ class LinkedList:
         """
         s = ""
         if not len(self): 
-            return EMPTYLST
+            return EMPTYLST #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CHANGE TO NULLSTR ###################################################################
         for node in self:
             s += gmestr(node.data) + (NULLSTR if not node.next else "") 
         return s
@@ -425,10 +425,26 @@ class Library:
     
     
         
-    # Loads in persistent memory stored in self.MEMDIR
+    # Loads in persistent memory stored in self.MEMDIR (LibMem.csv, or any other csv containing Game entries)
     # TODO: IMPLEMNET
     def loadMemory(self):
-        pass
+        """
+        Read in a CSV or txt file line-by-line (Library's attribute self.MEMDIR contains the filename of the peristsent memory, AKA, the csv/txt file)
+            - For each line, split into a list of 4 strings for each piece of data ([title, rating, size, price]) then pass the 
+                    resulting list into Game.stog(list goes here), which will return a Game instance (See Game class Docstring for more info)
+                + Be sure to strip each line of newline characters & extra spaces (do not remove necessary spaces in the title)
+            - Add Game to self.dataBase (You can use GameVar.title to access the title of the game)
+                + See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
+                NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-else block (see #resources channel)
+                + DO NOT USE 'Exception', IT MUST BE 'DuplicateEntry' exception, or 'EmptyEntry' exception
+            - If EmptyEntry or Duplicate entry is raised, ignore the line
+            - If no exception, add the game to self.dataBase (see __setitem__ in HashTable's docstring)
+        When the end of the file is reached, return
+        """
+        
+        # Your Code Here
+        
+        return
     
     # Writes newly added game(s) to MEMDIR file upon save & exit call
     # TODO: IMPLEMENT
