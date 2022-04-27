@@ -158,7 +158,7 @@ class LinkedList:
             int: Number of non-None Nodes in Linked List
         """
         i = 0
-        for node in self:
+        for _ in self:
             i += 1
         return i
     
@@ -171,7 +171,7 @@ class LinkedList:
         """
         s = ""
         if not len(self): 
-            return EMPTYLST #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CHANGE TO NULLSTR ###################################################################
+            return NULLSTR #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CHANGE TO NULLSTR ###################################################################
         for node in self:
             s += gmestr(node.data) + (NULLSTR if not node.next else "") 
         return s
@@ -329,7 +329,6 @@ class Library:
         dataBase (HashTable): Hash Table which contains all stored Games
         MEMDIR (str): Directory of persistent memory file
     """
-    
     def __init__(self, size=50):
         self.size = size
         self.dataBase = HashTable(size)   
@@ -629,9 +628,9 @@ class Library:
                 
             What user should see if the Library has a size of 3, & contains 1 game; game may appear in a different order):
             
-                    Empty List
+                    [None]
                     [CoD, 2.2, 10GB, $40]->[None]
-                    Empty List
+                    [None]
                 
                     Press Enter to go back
 
