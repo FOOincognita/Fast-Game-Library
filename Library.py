@@ -19,12 +19,21 @@ ytxt = lambda x: fgtxt(fg.YELLOW, x)
 ctxt = lambda x: fgtxt(fg.CYAN, x)
 gtxt = lambda x: fgtxt(fg.GREEN, x)
 mtxt = lambda x: fgtxt(fg.MAGENTA, x)
+wtxt = lambda x: fgtxt(fg.WHITE, x)
 
 rsinp = lambda x: str(input(rtxt(str(x))))
 ysinp = lambda x: str(input(ytxt(str(x))))
 csinp = lambda x: str(input(ctxt(str(x))))
 gsinp = lambda x: str(input(gtxt(str(x))))
 msinp = lambda x: str(input(mtxt(str(x))))
+wsinp = lambda x: str(input(wtxt(str(x))))
+
+cPrint = lambda x: print(ctxt(str(x)))
+rPrint = lambda x: print(rtxt(str(x)))
+gPrint = lambda x: print(gtxt(str(x)))
+yPrint = lambda x: print(ytxt(str(x)))
+mPrint = lambda x: print(mtxt(str(x)))
+wPrint = lambda x: print(wtxt(str(x)))
 
 ########## Global Constants ##########
 T = True
@@ -99,7 +108,7 @@ class Node:
     def title(self):
         """ Gets the title of a game within a Node's data attribute
         Usage:
-            node1.title 
+            nodeInstanceVariable.title 
         Returns:
             str: title of the Game stored in the Node
         """
@@ -341,37 +350,37 @@ class Library:
         """ Prompts user Y/N if they want to erase all Game permanently """
         while T:
             clear()
-            print("\n[WARNING]: Resetting the library will delete all games in memory forever!\n")
+            rPrint("\n[WARNING]: Resetting the library will delete all games in memory forever!\n")
             sleep(1)
-            selYN = sinp("\nAre you sure you want to delete all games [Y/N]?\n").strip().upper()
+            selYN = ysinp("\nAre you sure you want to delete all games [Y/N]?\n").strip().upper()
             if len(selYN) == 1 and selYN.isalpha() and selYN in ["Y","N"]:
                 match selYN:
                     case "N": return
                     case "Y": 
                         open(self.MEMDIR, 'w').close() 
                         self.dataBase = HashTable(self.size)
-                        print("\nLibrary Successfully Reset!\n")
-                        sinp("Press Enter to Continue")
+                        gPrint("\nLibrary Successfully Reset!\n")
+                        ysinp("Press Enter to Continue")
                         return
             else:
                 clear()
-                print("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
-                sleep(3)
+                rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
+                sleep(4)
     
     # Prints instructions
     @staticmethod
     def instructions():
-        """Prints Instructions"""
+        """ Prints Instructions """
         clear()
-        print("#"*22 + " Instructions " + "#"*22)
-        print("This library uses a HashTable to store & reterieve games\n& their data in constant time (Instantly).", end="")
-        print(" Lists, which\nare normally used to store indexable data, take linear\ntime (proportional to number of games stored).\n")
-        print("In this library, you can search, add games, delete games,\ncombine the existing library with a file containing\nentries,", end="")
-        print("print the library, reset the library, then save\n& exit whenever you're done.\n")
-        print("Whenever you exit, your games will be saved in memory,\nmeaning they'll still be in the libary for next time.\n")
-        print("Instructions for this software are always on screen; don't worry.\n")
-        print("#"*57)
-        sinp("Press Enter to Return")
+        wPrint("#"*22 + " Instructions " + "#"*22)
+        print(mtxt("This library uses a HashTable to store & reterieve games\n& their data in constant time (Instantly)."), end="")
+        mPrint(" Lists, which\nare normally used to store indexable data, take linear\ntime (proportional to number of games stored).\n")
+        print(mtxt("In this library, you can search, add games, delete games,\ncombine the existing library with a file containing\nentries,"), end="")
+        mPrint("print the library, reset the library, then save\n& exit whenever you're done.\n")
+        mPrint("Whenever you exit, your games will be saved in memory,\nmeaning they'll still be in the libary for next time.\n")
+        mPrint("User instructions for this software are always on screen.")
+        wPrint("#"*57)
+        ysinp("\nPress Enter to Return")
         return
     
     
@@ -662,16 +671,16 @@ class Library:
         sel = ""
         while not sel:
             clear()
-            print("#"*10 + " Main Menu " + "#"*10)
-            print("1) Search")
-            print("2) Add Game")
-            print("3) Delete Game")
-            print("4) Instructions")
-            print("5) Print Library")
-            print("6) Reset Library")
-            print("7) Import Library")
-            print("8) Save & Exit Program")
-            print("#"*30)
+            wPrint("#"*10 + " Main Menu " + "#"*10)
+            cPrint("1) Search")
+            cPrint("2) Add Game")
+            cPrint("3) Delete Game")
+            cPrint("4) Instructions")
+            cPrint("5) Print Library")
+            cPrint("6) Reset Library")
+            cPrint("7) Import Library")
+            cPrint("8) Save & Exit Program")
+            wPrint("#"*30)
             sel = ysinp("Please Make a Selection: ")
             
         if sel.isdigit() and 1 <= int(sel) <= 8:
@@ -682,7 +691,17 @@ class Library:
     # Saves & Exits saftely (writes any unsaved added games)
     # TODO: IMPLEMENT FULL FUNCTIONALITY
     def saveAndExit(self):
-        exit()
+        while T:
+            clear()
+            selYN = rsinp("\nAre you sure you want to exit [Y/N]?\n").strip().upper()
+            if len(selYN) == 1 and selYN.isalpha() and selYN in ["Y","N"]:
+                match selYN:
+                    case "N": return
+                    case "Y": exit()
+            else:
+                clear()
+                rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
+                sleep(4)
         
 ###################################################################### MAIN ###################################################################### 
 if __name__ == "__main__":
