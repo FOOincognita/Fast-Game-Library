@@ -57,7 +57,7 @@ class Game:
         Returns:
                 str: representing a Game's attributes
         """
-        return f"[{self.title},{self.rating},{self.size},{self.price}]"
+        return f"[{self.title}]"
     
     def __repr__(self):
         """ Formats Game instance to CSV style string
@@ -630,7 +630,7 @@ class Library:
             What user should see if the Library has a size of 3, & contains 1 game; game may appear in a different order):
             
                     [None]
-                    [CoD, 2.2, 10GB, $40]->[None]
+                    [Call of Duty]->[None]
                     [None]
                 
                     Press Enter to go back
