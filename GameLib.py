@@ -13,17 +13,17 @@ ctxt = lambda x: fgtxt(fg.CYAN, x)
 gtxt = lambda x: fgtxt(fg.GREEN, x)
 mtxt = lambda x: fgtxt(fg.MAGENTA, x)
 
-cPrint = lambda x: print(ctxt(str(x)))
-rPrint = lambda x: print(rtxt(str(x)))
-gPrint = lambda x: print(gtxt(str(x)))
-yPrint = lambda x: print(ytxt(str(x)))
-mPrint = lambda x: print(mtxt(str(x)))
+cPrint = lambda x: print(ctxt(x))
+rPrint = lambda x: print(rtxt(x))
+gPrint = lambda x: print(gtxt(x))
+yPrint = lambda x: print(ytxt(x))
+mPrint = lambda x: print(mtxt(x))
 
-rsinp = lambda x: str(input(rtxt(str(x))))
-ysinp = lambda x: str(input(ytxt(str(x))))
-csinp = lambda x: str(input(ctxt(str(x))))
-gsinp = lambda x: str(input(gtxt(str(x))))
-msinp = lambda x: str(input(mtxt(str(x))))
+rsinp = lambda x: sinp(rtxt(x))
+ysinp = lambda x: sinp(ytxt(x))
+csinp = lambda x: sinp(ctxt(x))
+gsinp = lambda x: sinp(gtxt(x))
+msinp = lambda x: sinp(mtxt(x))
 
 ########## Global Constants ##########
 T = True
