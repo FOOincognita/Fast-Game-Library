@@ -283,7 +283,7 @@ class HashTable:
         Usage:
             gameInstance = HashTableInstance[title_]
         Returns:
-            Game: Game instnace with specified title (if one exists in HashTable instance)
+            Game: Game instance with specified title (if one exists in HashTable instance)
         Raises:
             InvalidAccessErr: When a Game with passed title is not in Hash Table
         """
@@ -386,54 +386,28 @@ class Library:
     
     
     # Searches for single game by user inputted title
-    def search(self):
-        """
-        INSTRUCTIONS:
-            (*) Prompt user for title using (see sinp at very top of file):
-            
-                    title_ = sinp("Enter Title, or Type 'back' to Go Back: ") 
-            
-                If user input is "back", return
-                    - "back" can be any combination of upper/lower-case letters (eg 'back', 'BaCk', 'BACk', etc.)
-                        + Do NOT hard code every combination of 'back'; use a string method to standardize input
-                What the user should see:
-                
-                    Please enter title, or type 'back' to go back: 
-                    
-                Else search for game in self.dataBase using title_ (HashTable's __getitem__ documentation will be useful here)           
-            Searching:
-                Use a try-except-else to handle InvalidAccessErr exceptions when game not found (see HashTable class docstring)
-                    NOTE: Do NOT just check for 'Exception', you must ONLY check for InvalidAccessErr
-                If InvalidAccessErr is raised, Print "\n[Error]: Game not Found\n", then sleep(3), then loop back to (*)
-                If game with same title is found:
-                    - Print formatted contents of the found Game as shown below
-                        NOTE: repr(foundGame) will return a string formatted just like a csv of the Game returned by search
-                        + Ensure all data on the right of ':' is aligned when printed as shown
-                    - 2 lines under the formatted Game, prompt for input with message: "Hit Enter to Return"
-                        Example: repr(foundGame) would return a string like: "CoD, 2.2, 10GB, $40"
-                        What the user should see if game is Found:
-                        
-                                Title:  CoD
-                                Rating: 2.2
-                                Size:   10GB
-                                Price:  $40
-                                
-                                Hit Enter to Return
-                            
-                    + Once user hits enter, loop back to (*) screen
-                        NOTE: This means most, if not all, of your code will be in a while True loop, which stops when return is called
-        """
+    def search(self):    
+        while(True):
+            title_=sinp("Enter Title, or Type 'back' to Go Back:")
+            if (title_.lower() =="back"): return
+            try: gamev = self.dataBase[title_]
+            except InvalidAccessErr:
+                rPrint("\n[Error]: Game not Found\n")
+                sleep(3) 
+            else:
+                a = repr(gamev).strip(",")
+                print("Title:  ",a[0])
+                print("Rating:  ",a[1])
+                print("Size:  ",a[2])
+                print("Price:  ",a[3])
+                sinp("\n Hit Enter to Continue")
         
-        # Your Code here
         
-        return
-    
-    
-    
-    
-    
-    
-    
+        
+        
+        
+        
+        
         
     # Loads in persistent memory stored in self.MEMDIR (LibMem.csv, or any other csv containing Game entries)
     # TODO: IMPLEMNET
@@ -470,44 +444,32 @@ class Library:
         
     # imports games from a user-specified CSV
     def importGames(self):
-        """
-        INSTRUCTIONS:
-            (*) Prompt user for filename using (see sinp at very top of file):
-            
-                    filename = sinp("Enter filename, or type 'back' to go back: ") 
+        while T:
+            filename = sinp("Enter filename, or type 'back' to go back: ") 
+            if str.lower(filename) == "back": return
+            else:
+                openfile = open(filename,'r')
+                filedata = openfile.read()
+                lista = filedata.split('\n')
+                listb = [string.split(',') for string in lista]
+                openfile.close()
                 
-                NOTE: If the user input for filename is 'back' (any combo of upper/lower-case letters), return
-                    - Do NOT hard code in all combinations of "back"; use a str function to standardize input
-                Read in a CSV or txt file line-by-line (assume txt/csv are formatted as a CSV)
-                    - For each line, split into a list of 4 strings for each piece of data ([title, rating, size, price]) then pass the 
-                            resulting list into the class method Game.stog(list goes here), which will return a Game instance (See Game Docstring for more info)
-                        + ENSURE THE STRINGS IN THE LIST DO NOT CONTAIN NEWLINES OR EXTRA SPACES ANYWHERE
-                    - Add Game to self.dataBase (You can use GameVar.title to access the title of the game)
-                        + See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
-                    NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-except-else block (see #resources channel)
-                        + DO NOT USE 'Exception', IT MUST BE 'DuplicateEntry' exception, or 'EmptyEntry' exception
-                    - If EmptyEntry is raised, increment 'emtEntry', an int variable of the number of failed lines due to empty lines that had commas
-                    - If DuplicateEntry is raised, increment 'dupeEntry', an int variable of the number of failed lines due to duplicate games in file
-                    - If no exception, increment 'passed', an int variable containing the number of successfully added games
-                When the end of the file is reached, print results as shown below, with "Press Enter to Continue 2 lines below that:
-                    NOTE: All of the import data (the int variables) on the right should be aligned 
-                
-                                Import Complete
-                            ----------------------
-                            Successful Imports: 40
-                            Duplicate Imports:  3
-                            Empty Imports:      5
-                            
-                            Press Enter to Continue
+                d, e, p = 0, 0, 0
+                for row in listb:
+                    try:
+                        gameinfo = Game.stog(row)
+                        self.dataBase[gameinfo.title] = gameinfo
+                    except DuplicateEntry: d+=1
+                    except EmptyEntry: e+=1                
+                    else: p+=1
                     
-                Once enter is pressed, loop back to (*); 
-                    NOTE: This means most of your code will be within a while True loop; only stops looping when returned
-        """
-        
-        
-        # Your Code Here
-        
-        
+                print("    Import Completed    ")
+                print("----------------------")
+                print("Successful Imports: {}".format(p))
+                print("Duplicate Imports:  {}".format(d))
+                print("Empty Imports:      {}".format(e))
+                print()
+                ysinp("Press Enter to Continue")
         return
     
     
