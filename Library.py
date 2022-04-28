@@ -403,45 +403,6 @@ class Library:
                 sinp("\n Hit Enter to Continue")
         
         
-        
-        
-        
-        
-        
-        
-    # Loads in persistent memory stored in self.MEMDIR (LibMem.csv, or any other csv containing Game entries)
-    # TODO: IMPLEMNET
-    def loadMemory(self):
-        """
-        Read in a CSV or txt file line-by-line (Library's attribute self.MEMDIR contains the filename of the peristsent memory, AKA, the csv/txt file)
-            - For each line, split into a list of 4 strings for each piece of data ([title, rating, size, price]) then pass the 
-                    resulting list into Game.stog(list goes here), which will return a Game instance (See Game class Docstring for more info)
-                + Be sure to strip each line of newline characters & extra spaces (do not remove necessary spaces in the title)
-            - Add Game to self.dataBase (You can use GameVar.title to access the title of the game)
-                + See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
-                NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-else block (see #resources channel)
-                + DO NOT USE 'Exception', IT MUST BE 'DuplicateEntry' exception, or 'EmptyEntry' exception
-            - If EmptyEntry or Duplicate entry is raised, ignore the line
-            - If no exception, add the game to self.dataBase (see __setitem__ in HashTable's docstring)
-        When the end of the file is reached, return
-        """
-        
-        # Your Code Here
-        
-        return
-    
-    # Writes newly added game(s) to MEMDIR file upon save & exit call
-    # TODO: IMPLEMENT
-    def writeMemory(self, game_):
-        pass
-        
-        
-        
-        
-        
-        
-        
-        
     # imports games from a user-specified CSV
     def importGames(self):
         while T:
@@ -471,16 +432,100 @@ class Library:
                 print()
                 ysinp("Press Enter to Continue")
                 return
+        
 
+    # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
+    @staticmethod
+    def promptMainMenu():
+        """ Prompts main menu; grabs user input with error checking
+        Raises:
+            InvalidSelection: When user inputs anything other than an int in [1,8]
+        Returns:
+            int: user input (menu selection)
+        """
+        sel = ""
+        while not sel:
+            clear()
+            wPrint("#"*10 + " Main Menu " + "#"*10)
+            cPrint("1) Search")
+            cPrint("2) Add Game")
+            cPrint("3) Delete Game")
+            cPrint("4) Instructions")
+            cPrint("5) Print Library")
+            cPrint("6) Reset Library")
+            cPrint("7) Import Library")
+            cPrint("8) Save & Exit Program")
+            wPrint("#"*30)
+            sel = ysinp("Please Make a Selection: ")
+            
+        if sel.isdigit() and 1 <= int(sel) <= 8:
+            return int(sel)
+        else:
+            raise InvalidSelection(sel)
     
-    
-    
-    
-    
-    
-    
-    
-    
+    # Saves & Exits saftely (writes any unsaved added games)
+    # TODO: IMPLEMENT FULL FUNCTIONALITY
+    def saveAndExit(self):
+        while T:
+            clear()
+            selYN = rsinp("\nAre you sure you want to exit [Y/N]?\n").strip().upper()
+            if len(selYN) == 1 and selYN.isalpha() and selYN in ["Y","N"]:
+                match selYN:
+                    case "N": return
+                    case "Y": exit()
+            else:
+                clear()
+                rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
+                sleep(4)
+                
+    # Dunder str(); Formats Library's HashTable (dataBase) to printable form
+    def __str__(self):
+        """ Casts Library Instance to string
+        Returns:
+            str: a string representing the underlying HashTable Instnace
+        """
+        return str(self.dataBase)
+        
+    # Writes newly added game(s) to MEMDIR file upon save & exit call
+    # TODO: IMPLEMENT
+    def writeMemory(self, game_):
+        pass 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+################################################################## FUNCTIONS TO IMPLEMENT BELOW ###################################################################     
+        
+        
+        
+        
+    # Loads in persistent memory stored in self.MEMDIR (LibMem.csv, or any other csv containing Game entries)
+    def loadMemory(self):
+        """
+        Read in a CSV or txt file line-by-line (Library's attribute self.MEMDIR contains the filename of the peristsent memory, AKA, the csv/txt file)
+            - For each line, split into a list of 4 strings for each piece of data ([title, rating, size, price]) then pass the 
+                    resulting list into Game.stog(list goes here), which will return a Game instance (See Game class Docstring for more info)
+                + Be sure to strip each line of newline characters & extra spaces (do not remove necessary spaces in the title)
+            - Add Game to self.dataBase (You can use GameVar.title to access the title of the game)
+                + See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
+                NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-else block (see #resources channel)
+                + DO NOT USE 'Exception', IT MUST BE 'DuplicateEntry' exception, or 'EmptyEntry' exception
+            - If EmptyEntry or Duplicate entry is raised, ignore the line
+            - If no exception, add the game to self.dataBase (see __setitem__ in HashTable's docstring)
+        When the end of the file is reached, return
+        """
+        
+        # Your Code Here
+        
+        return
+        
+        
+        
     
     
     
@@ -527,11 +572,7 @@ class Library:
     
     
     
-    
-    
-    
-    
-    
+
     
     
     # Deletes a Game instance given a Title
@@ -571,30 +612,11 @@ class Library:
     
     
     
-    
-    
-    
-    
-    
-    
-    # Dunder str(); Formats Library's HashTable (dataBase) to printable form
-    def __str__(self):
-        """ Casts Library Instance to string
-        Returns:
-            str: a string representing the underlying HashTable Instnace
-        """
-        return str(self.dataBase)
-    
-    
-    
-    
-    
-    
     # Prints library to terminal
     def printLib(self):
         """ 
         INSTRUCTIONS:
-            (*) Print Library as a string (the function right above you will allow self to be cast as a string)
+            (*) Print Library as a string (Library's __str__ method will be useful to look at)
                 + do NOT use str(self.dataBase)
             Print a newline, then prompt user for input using (see sinp at very top of file):
              
@@ -617,59 +639,9 @@ class Library:
         
         return
 
-
-
-
-
-
-
-    # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
-    @staticmethod
-    def promptMainMenu():
-        """ Prompts main menu; grabs user input with error checking
-        Raises:
-            InvalidSelection: When user inputs anything other than an int in [1,8]
-        Returns:
-            int: user input (menu selection)
-        """
-        sel = ""
-        while not sel:
-            clear()
-            wPrint("#"*10 + " Main Menu " + "#"*10)
-            cPrint("1) Search")
-            cPrint("2) Add Game")
-            cPrint("3) Delete Game")
-            cPrint("4) Instructions")
-            cPrint("5) Print Library")
-            cPrint("6) Reset Library")
-            cPrint("7) Import Library")
-            cPrint("8) Save & Exit Program")
-            wPrint("#"*30)
-            sel = ysinp("Please Make a Selection: ")
-            
-        if sel.isdigit() and 1 <= int(sel) <= 8:
-            return int(sel)
-        else:
-            raise InvalidSelection(sel)
-    
-    # Saves & Exits saftely (writes any unsaved added games)
-    # TODO: IMPLEMENT FULL FUNCTIONALITY
-    def saveAndExit(self):
-        while T:
-            clear()
-            selYN = rsinp("\nAre you sure you want to exit [Y/N]?\n").strip().upper()
-            if len(selYN) == 1 and selYN.isalpha() and selYN in ["Y","N"]:
-                match selYN:
-                    case "N": return
-                    case "Y": exit()
-            else:
-                clear()
-                rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
-                sleep(4)
         
 ###################################################################### MAIN ###################################################################### 
-if __name__ == "__main__":
-    pass
+if __name__ == "__main__": pass
 
 # Function Signup Sheet: https://docs.google.com/spreadsheets/d/1FHZYT3ugd7z8yNfNrpPMC92HNbMRgKagbsxZSr7g1Bs/edit?usp=sharing
 
