@@ -1,3 +1,4 @@
+import utils
 from decimal import InvalidOperation
 from os import system 
 from time import sleep
