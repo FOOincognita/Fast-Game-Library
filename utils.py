@@ -11,6 +11,9 @@ class DuplicateEntry(Exception): pass
 # Used as a custom exception when an empty or N/A title is passed (INVALID ENTRY)
 class EmptyEntry(Exception): pass
 
+# Used as a custom exception when anything other than ints 1-8 are entered in main menu
+class InvalidSelection(Exception): pass
+
 def should_install_requirement(requirement):
     should_install = False
     try:
@@ -33,11 +36,13 @@ def install_packages(requirement_list):
 
     except Exception as e:
         print(e)
-        print(st.BRIGHT + fg.RED + "[ ERROR ] PLEASE INSTALL PIP\n" + st.RESET_ALL)
+        print(st.BRIGHT + fg.RED + "[ERROR] PLEASE INSTALL PIP\n" + st.RESET_ALL)
         
 # Add required packages here
-install_packages(['colorama'])
+install_packages(['colorama', 'cursor'])
 
+########## PYTHON VER VALIDATION ##########
 if python_version().split('.')[1] != "10":
-    print(st.BRIGHT + fg.RED + "\n[ ERROR ] PLEASE INSTALL PYTHON 3.10 OR ABOVE" + st.RESET_ALL)
+    print(st.BRIGHT + fg.RED + "\n[ERROR] PLEASE INSTALL PYTHON 3.10 OR ABOVE" + st.RESET_ALL)
     print(st.BRIGHT + fg.YELLOW + "Your current version: " + str(python_version()) + "\n" + st.RESET_ALL)
+    

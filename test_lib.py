@@ -1,5 +1,7 @@
 import utils
 import unittest as uni
+from io import StringIO
+from unittest.mock import patch
 from utils import DuplicateEntry, EmptyEntry
 from xml.dom import InvalidAccessErr
 from Library import Game, Node, LinkedList, HashTable, Library
@@ -11,9 +13,15 @@ init(autoreset=True)
 
 FAIL = st.BRIGHT + fg.RED + "[ FAIL ]"
 
+NULLSTR = st.BRIGHT + bg.BLACK + fg.BLUE + "[None]" + st.RESET_ALL
+ARROW = st.BRIGHT + fg.WHITE + chr(10236) + " "
+
+sinp = lambda x: str(input(x)) 
+gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL + ARROW
+
 fgc = lambda x,y: x + y 
 
-class TestLibrary(uni.TestCase):
+class TestDataStructs(uni.TestCase):
     
     # Runs before each test
     def setUp(self):
@@ -23,16 +31,20 @@ class TestLibrary(uni.TestCase):
         self.testStrGame2 = Game("", "", "", "")
         self.testStrGame3 = Game()
         
-        self.testStogGame = Game.stog("GameStog,10,80GB,$50\n")
+        self.testStogGame = Game.stog(["GameStog","10","80GB","$50"])
         
         # test_LL objects
         self.testLLstr1 = LinkedList()
         self.testLLstr2 = LinkedList()
         
-        # test_HT object
+        # test_HT objects
         self.testHT = HashTable(10)
-
-
+        self.htTst = HashTable(1)
+        
+        # test_Lib object
+        self.tLib = Library(3)
+        
+        
     
     # Tests Game::__str__() dunder method 
     def test_strGame(self):
@@ -49,24 +61,23 @@ class TestLibrary(uni.TestCase):
         
     # Tests LinkedList::__str__() dunder method 
     def test_LLStr(self):
-        self.assertEqual(str(self.testLLstr1), "Empty List", FAIL)
+        self.assertEqual(str(self.testLLstr1), NULLSTR, FAIL)
         
     # Tests LinkedList::emplace_back() method 
     def test_LLEmplace_Back(self):
         threw1 = False
         self.testLLstr1.emplace_back(self.testStrGame1)
-        self.assertEqual(str(self.testLLstr1), "[Game1,5,40GB,$20]->None", FAIL)
+        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + NULLSTR, FAIL)
         self.testLLstr1.emplace_back(self.testStrGame2)
-        self.assertEqual(str(self.testLLstr1), "[Game1,5,40GB,$20]->[,,,]->None", FAIL)
+        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + gmestr("[,,,]") + NULLSTR, FAIL)
         self.testLLstr1.emplace_back(self.testStrGame3)
-        self.assertEqual(str(self.testLLstr1), "[Game1,5,40GB,$20]->[,,,]->[N/A,N/A,N/A,N/A]->None", FAIL)
+        self.assertEqual(str(self.testLLstr1), gmestr("[Game1,5,40GB,$20]") + gmestr("[,,,]") + gmestr("[N/A,N/A,N/A,N/A]") + NULLSTR, FAIL)
         
         try:
             self.testLLstr1.emplace_back(self.testStrGame1)
         except(DuplicateEntry):
             threw1 = True
         self.assertTrue(threw1, FAIL)
-        
         
     # Tests LinkedList::__len__() dunder method 
     def test_LLLen(self):
@@ -84,17 +95,17 @@ class TestLibrary(uni.TestCase):
         self.testLLstr1.emplace_back(self.testStrGame1)
         del self.testLLstr1[self.testStrGame1.title]
         self.assertEqual(len(self.testLLstr1), 0, FAIL) ######### 0
-        self.assertEqual(str(self.testLLstr1), "Empty List", FAIL)
+        self.assertEqual(str(self.testLLstr1), NULLSTR, FAIL)
         
         self.testLLstr1.emplace_back(self.testStrGame2)
         self.testLLstr1.emplace_back(self.testStrGame3)
         del self.testLLstr1[self.testStrGame2.title]
         self.assertEqual(len(self.testLLstr1), 1, FAIL)
-        self.assertEqual(str(self.testLLstr1), "[N/A,N/A,N/A,N/A]->None", FAIL)
+        self.assertEqual(str(self.testLLstr1), gmestr("[N/A,N/A,N/A,N/A]") + NULLSTR, FAIL)
         
         del self.testLLstr1[self.testStrGame3.title]
         self.assertEqual(len(self.testLLstr1), 0, FAIL)
-        self.assertEqual(str(self.testLLstr1), "Empty List", FAIL)
+        self.assertEqual(str(self.testLLstr1), NULLSTR, FAIL)
         
         try:
             del self.testLLstr1[self.testStrGame2.title]
@@ -110,20 +121,15 @@ class TestLibrary(uni.TestCase):
             threw2 = True
         self.assertTrue(threw2, FAIL)
         
-        
-        
     # Tests LinkedList::__iter__() dunder method 
     def test_LLIter(self):
         testStr = ""
         self.testLLstr1.emplace_back(self.testStrGame1)
         self.testLLstr1.emplace_back(self.testStrGame2)
         self.testLLstr1.emplace_back(self.testStrGame3)
-        
         for n in self.testLLstr1:
             testStr += str(n)
-            
         self.assertEqual(testStr, "[Game1,5,40GB,$20][,,,][N/A,N/A,N/A,N/A]", FAIL)
-        
         
         
         
@@ -136,16 +142,14 @@ class TestLibrary(uni.TestCase):
         self.assertTrue(hshnetest != hsh, FAIL)
         hshtest2 = self.testHT.hash("abcDtF")
         self.assertTrue(hshtest2 == hsh, FAIL)
-            
     
     # Tests HashTable::__str__() dunder method with empty table
     def test_HTStr(self):
         testStr = ""
         
         for i in range(10):
-            testStr += "Empty List\n"
+            testStr += NULLSTR + "\n"
         self.assertEqual(str(self.testHT), testStr, FAIL)
-        
     
     # Tests HashTable::__set/getitem__() dunder method 
     def test_HTSetItem(self):
@@ -157,16 +161,40 @@ class TestLibrary(uni.TestCase):
                     found1 = True
         self.assertTrue(found1, FAIL)
         
-        try:
-            self.testHT[self.testStrGame3.title] = self.testStrGame3
-            self.testHT[self.testStrGame3.title] = self.testStrGame3
-        except(EmptyEntry):
-            except1 = True
-        except(DuplicateEntry):
+        try: 
+            self.testHT[self.testStrGame1.title] = self.testStrGame1
+        except(DuplicateEntry): 
             except2 = True
+        try: 
+            self.testHT[self.testStrGame3.title] = self.testStrGame3
+        except(EmptyEntry): 
+            except1 = True
+        
         self.assertTrue(except1, FAIL)
         self.assertTrue(except2, FAIL)
         
+    # Tests HashTable::__del__() dunder method 
+    def test_HTDelItem(self):
+        raised = False
+        try: del self.htTst["invalidtitle"]
+        except(InvalidAccessErr): raised = True
+        self.assertTrue(raised, FAIL)
+        
+        self.htTst[self.testStrGame1.title] = self.testStrGame1
+        del self.htTst[self.testStrGame1.title]
+        self.assertEqual(str(self.htTst), NULLSTR + "\n", FAIL)
+        
+    # Tests HashTable::__len__() dunder method 
+    def test_HTDelItem(self):
+        self.assertEqual(len(self.htTst), 0, FAIL)
+        self.htTst[self.testStrGame1.title] = self.testStrGame1
+        self.assertEqual(len(self.htTst), 1, FAIL)
+        self.htTst[self.testStogGame.title] = self.testStogGame
+        self.assertEqual(len(self.htTst), 2, FAIL)
+        del self.htTst[self.testStrGame1.title]
+        del self.htTst[self.testStogGame.title]
+        self.assertEqual(len(self.htTst), 0, FAIL) 
+
         
         
 if __name__ == "__main__":
