@@ -438,8 +438,38 @@ class Library:
         
         
         # Your Code Here
-        
-        
+        K = True
+        while K:
+            filename = sinp("Enter filename, or type 'back' to go back: ") 
+            if str.lower(filename) == "back":
+                    return
+            else:
+                openfile = open(filename,'r')
+                filedata = openfile.read()
+                lista = filedata.split('\n')
+                listb = [string.split(',') for string in lista]
+                openfile.close()
+                d=0
+                e=0
+                p=0
+                for row in listb:
+                    try:
+                        gameinfo = Game.stog(row)
+                        self.dataBase[gameinfo.title] = gameinfo
+                    except DuplicateEntry:
+                        d+=1
+                    except EmptyEntry:
+                        e+=1                
+                    else:
+                        p+=1
+                print("    Import Completed    ")
+                print("----------------------")
+                print("Successful Imports: {}".format(p))
+                print("Duplicate Imports:  {}".format(d))
+                print("Empty Imports:      {}".format(e))
+                print()
+                sinp("Press Enter to Continue")
+
         return
     
     
