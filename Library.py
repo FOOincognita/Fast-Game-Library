@@ -10,10 +10,9 @@ init(autoreset=True)
 NULLSTR = st.BRIGHT + bg.BLACK + fg.BLUE + "[None]" + st.RESET_ALL
 ARROW = st.BRIGHT + fg.WHITE + chr(10236) + " "
 
-sinp = lambda x: str(input(x)) 
-gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL + ARROW
-
+sinp = lambda x: str(input(str(x)))
 fgtxt = lambda x,y: st.BRIGHT + x + str(y) + st.RESET_ALL
+gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL + ARROW
 rtxt = lambda x: fgtxt(fg.RED, x)
 ytxt = lambda x: fgtxt(fg.YELLOW, x)
 ctxt = lambda x: fgtxt(fg.CYAN, x)
@@ -21,19 +20,19 @@ gtxt = lambda x: fgtxt(fg.GREEN, x)
 mtxt = lambda x: fgtxt(fg.MAGENTA, x)
 wtxt = lambda x: fgtxt(fg.WHITE, x)
 
-rsinp = lambda x: str(input(rtxt(str(x))))
-ysinp = lambda x: str(input(ytxt(str(x))))
-csinp = lambda x: str(input(ctxt(str(x))))
-gsinp = lambda x: str(input(gtxt(str(x))))
-msinp = lambda x: str(input(mtxt(str(x))))
-wsinp = lambda x: str(input(wtxt(str(x))))
+cPrint = lambda x: print(ctxt(x))
+rPrint = lambda x: print(rtxt(x))
+gPrint = lambda x: print(gtxt(x))
+yPrint = lambda x: print(ytxt(x))
+mPrint = lambda x: print(mtxt(x))
+wPrint = lambda x: print(wtxt(x))
 
-cPrint = lambda x: print(ctxt(str(x)))
-rPrint = lambda x: print(rtxt(str(x)))
-gPrint = lambda x: print(gtxt(str(x)))
-yPrint = lambda x: print(ytxt(str(x)))
-mPrint = lambda x: print(mtxt(str(x)))
-wPrint = lambda x: print(wtxt(str(x)))
+rsinp = lambda x: sinp(rtxt(x))
+ysinp = lambda x: sinp(ytxt(x))
+csinp = lambda x: sinp(ctxt(x))
+gsinp = lambda x: sinp(gtxt(x))
+msinp = lambda x: sinp(mtxt(x))
+wsinp = lambda x: sinp(wtxt(x))
 
 ########## Global Constants ##########
 T = True
