@@ -1,6 +1,6 @@
 ########## Libraries ##########
 import os
-import csv 
+import cursor # cursor.hide()
 from time import sleep 
 from xml.dom import InvalidAccessErr, InvalidCharacterErr
 from utils import DuplicateEntry, EmptyEntry, InvalidSelection
@@ -9,6 +9,8 @@ init(autoreset=True)
 
 NULLSTR = st.BRIGHT + bg.BLACK + fg.BLUE + "[None]" + st.RESET_ALL
 ARROW = st.BRIGHT + fg.WHITE + chr(10236) + " "
+HIDECURSOR = '\033[?25l' # end=''
+SHOWCURSOR = '\033[?25h' # end=''
 
 sinp = lambda x: str(input(str(x)))
 fgtxt = lambda x,y: st.BRIGHT + x + str(y) + st.RESET_ALL
