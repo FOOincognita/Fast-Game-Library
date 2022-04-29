@@ -1,6 +1,5 @@
 ########## Libraries ##########
 import os
-import cursor # cursor.hide()
 from time import sleep 
 from xml.dom import InvalidAccessErr, InvalidCharacterErr
 from utils import DuplicateEntry, EmptyEntry, InvalidSelection
@@ -46,7 +45,7 @@ F = False
 def clear():
     os.system('cls||clear')
 
-###################################################################### GAME CLASS ###################################################################### 
+
 class Game:
     """ Each instance represents a single Game
     
@@ -92,8 +91,6 @@ class Game:
         return cls(*line)
 
 
-###################################################################### NODE CLASS ###################################################################### 
-
 class Node:
     """ Represents a single Node in a Linked List
     
@@ -123,9 +120,7 @@ class Node:
             str: Represents a Node's attributes
         """
         return str(self.data)
-    
-    
-###################################################################### LINKEDLIST CLASS ###################################################################### 
+
 
 class LinkedList:
     """ Linked List used in Hash Table to implement chaining method for handling collisions 
@@ -181,7 +176,7 @@ class LinkedList:
         """
         s = ""
         if not len(self): 
-            return NULLSTR #<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< CHANGE TO NULLSTR ###################################################################
+            return NULLSTR 
         for node in self:
             s += gmestr(node.data) + (NULLSTR if not node.next else "") 
         return s
@@ -230,8 +225,6 @@ class LinkedList:
                 node.next = Node(game_)
                 return
 
-
-###################################################################### HASHTABLE CLASS ###################################################################### 
 
 class HashTable:
     """ Hash Table data structure which contains all Games in Library. Uses Linked Lists for chaining to handle collisions
@@ -328,8 +321,6 @@ class HashTable:
         return i
     
     
-###################################################################### LIBRARY CLASS ###################################################################### 
-    
 # Serves as the highest abstract data type (class), which contains the game database (Hash Table)
 class Library:
     """ Represents the Game library; wrapper for data structures
@@ -346,9 +337,8 @@ class Library:
         
         self.loadMemory()
     
-    # Resets entire game Library including LibMem.csv
     def resetLib(self):
-        """ Prompts user Y/N if they want to erase all Game permanently """
+        """ Prompts user Y/N if they want to erase all Games permanently from HashTable & specified persistent memory CSV """
         while T:
             clear()
             rPrint("\n[WARNING]: Resetting the library will delete all games in memory forever!\n")
@@ -368,7 +358,6 @@ class Library:
                 rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
                 sleep(4)
     
-    # Prints instructions
     @staticmethod
     def instructions():
         """ Prints Instructions """
@@ -385,8 +374,8 @@ class Library:
         return
     
     
-    # Searches for single game by user inputted title
     def search(self):    
+        """ Searches for single game by user inputted title """
         while(True):
             title_=sinp("Enter Title, or Type 'back' to Go Back:")
             if (title_.lower() =="back"): return
@@ -402,9 +391,8 @@ class Library:
                 print("Price:  ",a[3])
                 sinp("\n Hit Enter to Continue")
         
-        
-    # imports games from a user-specified CSV
     def importGames(self):
+        """ Imports games from a user-specified CSV into self.dataBase (a HashTable) """
         while T:
             filename = sinp("Enter filename, or type 'back' to go back: ") 
             if str.lower(filename) == "back": return
@@ -433,8 +421,6 @@ class Library:
                 ysinp("Press Enter to Continue")
                 return
         
-
-    # Prompts user to make a selection; USE MATCH STATMENT (SWITCH)
     @staticmethod
     def promptMainMenu():
         """ Prompts main menu; grabs user input with error checking
@@ -489,20 +475,7 @@ class Library:
     # Writes newly added game(s) to MEMDIR file upon save & exit call
     # TODO: IMPLEMENT
     def writeMemory(self, game_):
-        pass 
-        
-        
-        
-        
-        
-        
-        
-        
-        
-################################################################## FUNCTIONS TO IMPLEMENT BELOW ###################################################################     
-        
-        
-        
+        pass     
         
     # Loads in persistent memory stored in self.MEMDIR (LibMem.csv, or any other csv containing Game entries)
     def loadMemory(self):
@@ -523,124 +496,49 @@ class Library:
         # Your Code Here
         
         return
-        
-        
-        
     
-    
-    
-    
-    # Adds game to library
     def addGame(self):
-        """
-        INSTRUCTIONS:
-            (*) Prompt user for title using (see sinp at very top of file):
-            
-                    title_ = sinp("Enter title, or type 'back' to go back: ") 
+        """ Adds game to Library's dataBase attribute (HashTable) using user-inputted data """
+        while T:
+            clear()
+            title_ = sinp("Enter title, or type 'back' to go back: ") 
+            if title_.lower() == "back": return
+            else:
+                msg = ""
+                rating_ = sinp("Enter rating: ") 
+                size_ = sinp("Enter size (GB): ") 
+                price_ = sinp("Enter Price ($): ")
+                try: self.dataBase[title_] = Game.stog([title_, rating_, size_, price_])
+                except DuplicateEntry: msg = rtxt("\n[ERROR]: Duplicate Game Entry!\n")
+                except EmptyEntry: msg = rtxt("\n[ERROR]: Blank Game Entry!\n")
+                else: msg = gtxt("\nGame Successfully Added to Library!\n")
+                finally:
+                    clear()
+                    print(msg)
+                    sleep(4)
                     
-                NOTE: 
-                    - If user enters 'back' (any combo of upper/lower-case letters), return
-                        + Do NOT hard code in all combinations of "back"; use a str function to standardize input
-                    - Else prompt for rating, size (in GB), & price (in $)
-                        + Add "GB" if missing from user inputted size string
-                        + Add "$" if missing from user inputted price string
-                        What user should see:
-                        
-                        Enter Rating: 
-                        ...
-            
-            Put each in correct order in list of strings, then pass into Game.stog(list) (returns a Game instance)
-                - See Game's Docstring for stog usage
-            Use Try-Except-Except-Else-finally block to handle DuplicateEntry exceptions for next steps
-                - Do NOT check for 'Exception'; you must only check for DuplicateEntry exceptions
-            Try to add Game to self.dataBase (HashTable) using title_ & the Game instance returned by Game.stog()
-                - Look in the HashTable class Docstring to see how to add games to self.dataBase (HashTable's __setitem__ will be useful)
-                - Print "\nGame successfully added\n" if no exceptions were raised
-                - If DuplicateEntry is raised, print "\n[ERROR]: Duplicate Game!\n"
-                - If EmptyEntry is raised, print "\n[ERROR]: Empty Entry!\n"
-            Finally, sleep(3)
-            Loop back to (*); This means most, if not all, of your code will be in a While True loop, which only stops upon return
-        """
-        
-        
-        # Your code here
-        
-        
-        
-        return
-    
-    
-    
-    
-
-    
-    
-    # Deletes a Game instance given a Title
     def delGame(self):
-        """
-        INSTRUCTIONS:
-            (*) Prompt user for title using (see sinp at very top of file):
-            
-                    title_ = sinp("Enter Title of Game, or 'back' to Return to Main Menu: ") 
-                    
-            If the user input for title_ is any combo of upper/lower-case letters of "back", return
-                - "back", "Back", "BaCk", & all other combinations should be accepted as equal to "back"
-                - Do NOT hard code in all combinations of "back"; use a str function to standardize string input
-            Else, using a try-except-else-finally block:
-            
-                Try to delete game from self.dataBase using title_
-                    - Look in the HashTable class Docstring to see how to delete games using a title
-                        + __delitem__ documentation will be useful, especially the "usage" portion
-                            
-                If InvalidAccessErr raised, Print "\n[ERROR]: Game not found\n"
-                    - Do NOT check for the exception called 'Exception'; you MUST only check for 'InvalidAccessErr'
-                        
-                Else, Print "\nGame successfully deleted\n"   
-                
-                Finally, sleep(3)
-                      
-            Loop back to (*); This means most, if not all, of your code will be in a while True loop
-        """
-        
-        
-        # Your code here
-        
-        
-        return 
+        """ Deletes a Game instance given a Title """
+        while True:
+            title_ = sinp("Enter Title of Game, or 'back' to Return to Main Menu: ")
+            if title_.lower() == "back": return
+            else:
+                try: del self.dataBase[title_]
+                except InvalidAccessErr: print("\n[ERROR]: Game not found\n")
+                else: print("\nGame successfully deleted\n" )
+                finally: sleep(3)
     
-    
-    
-    
-    
-    # Prints library to terminal
     def printLib(self):
-        """ 
-        INSTRUCTIONS:
-            (*) Print Library as a string (Library's __str__ method will be useful to look at)
-                + do NOT use str(self.dataBase)
-            Print a newline, then prompt user for input using (see sinp at very top of file):
-             
-                    sinp("Press Enter to go back: ") 
-                
-            What user should see if the Library has a size of 3, & contains 1 game; game may appear in a different order):
-            
-                    [None]
-                    [Call of Duty]->[None]
-                    [None]
-                
-                    Press Enter to go back
-
-            Once they hit enter, return 
-        """
-        
-        
-        # your code here
-        
-        
+        """ Prints Library's database (HashTable) to terminal """
+        print(self)
+        sinp("Press Enter to go back: ") 
         return
 
-        
-###################################################################### MAIN ###################################################################### 
+
+
+
+
+
 if __name__ == "__main__": pass
 
 # Function Signup Sheet: https://docs.google.com/spreadsheets/d/1FHZYT3ugd7z8yNfNrpPMC92HNbMRgKagbsxZSr7g1Bs/edit?usp=sharing

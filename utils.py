@@ -39,7 +39,7 @@ def install_packages(requirement_list):
         print(st.BRIGHT + fg.RED + "[ERROR] PLEASE INSTALL PIP\n" + st.RESET_ALL)
         
 # Add required packages here
-install_packages(['colorama', 'cursor'])
+install_packages(['colorama'])
 
 ########## PYTHON VER VALIDATION ##########
 if python_version().split('.')[1] != "10":
