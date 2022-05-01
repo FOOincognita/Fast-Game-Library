@@ -8,13 +8,15 @@ init(autoreset=True)
 
 NULLSTR = st.BRIGHT + bg.BLACK + fg.BLUE + "[None]" + st.RESET_ALL
 ARROW = st.BRIGHT + fg.WHITE + chr(10236) + " "
+ARROW_WSL = st.BRIGHT + fg.WHITE + bg.BLACK + "->" + st.RESET_ALL
 HIDECURSOR = '\033[?25l' # end=''
 SHOWCURSOR = '\033[?25h' # end=''
 
 sinp = lambda x: str(input(str(x)))
 fgtxt = lambda x,y: st.BRIGHT + x + str(y) + st.RESET_ALL
-gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL + ARROW
+gmestr = lambda x:  st.BRIGHT + bg.BLACK + fg.GREEN + str(x) + st.RESET_ALL + ARROW_WSL ################# CHNAGE TO ARROW WHEN USING VSCODE'S TERMINAL, LEAVE AS IS FOR WSL2
 rtxt = lambda x: fgtxt(fg.RED, x)
+btxt = lambda x: fgtxt(fg.BLUE, x)
 ytxt = lambda x: fgtxt(fg.YELLOW, x)
 ctxt = lambda x: fgtxt(fg.CYAN, x)
 gtxt = lambda x: fgtxt(fg.GREEN, x)
@@ -23,12 +25,14 @@ wtxt = lambda x: fgtxt(fg.WHITE, x)
 
 cPrint = lambda x: print(ctxt(x))
 rPrint = lambda x: print(rtxt(x))
+bPrint = lambda x: print(btxt(x))
 gPrint = lambda x: print(gtxt(x))
 yPrint = lambda x: print(ytxt(x))
 mPrint = lambda x: print(mtxt(x))
 wPrint = lambda x: print(wtxt(x))
 
 rsinp = lambda x: sinp(rtxt(x))
+bsinp = lambda x: sinp(btxt(x))
 ysinp = lambda x: sinp(ytxt(x))
 csinp = lambda x: sinp(ctxt(x))
 gsinp = lambda x: sinp(gtxt(x))
@@ -43,7 +47,19 @@ F = False
 
 # Clears terminal screen on Win, Mac, & Linux
 def clear():
-    os.system('cls||clear')
+    os.system('cls' if os.name == 'nt' else 'clear')
+
+# Formats name (First, Middle, & Last) to have capital first letter, lowercase remaining
+def formName(name):
+    form = ""
+    LOW = ["of", "the"]
+    for n in name.strip().split(" "):
+        form += (n.lower() if n.casefold() in LOW else n[0].upper() + n[1:].lower())
+#        if n.casefold() in ["of", "the"]:
+#            form += n.lower() + " "
+#        else: form += n[0].upper() + n[1:].lower() + " " 
+        form += " "
+    return form[:-1]
 
 
 class Game:
@@ -180,7 +196,7 @@ class LinkedList:
         for node in self:
             s += gmestr(node.data) + (NULLSTR if not node.next else "") 
         return s
-    
+            
     def __delitem__(self, title):
         """ Deletes specified game in Linked List
         Args:
@@ -281,7 +297,7 @@ class HashTable:
             InvalidAccessErr: When a Game with passed title is not in Hash Table
         """
         for node in self.arr[self.hash(title_)]:
-            if node.title == title_: 
+            if node.title.casefold() == title_.casefold(): 
                 return node.data
         raise InvalidAccessErr
             
@@ -306,7 +322,7 @@ class HashTable:
         table = ""
         for ll in self.arr:
             table += str(ll) + "\n"
-        return table
+        return table       
             
     def __len__(self): 
         """ Gets Number of Games in Hash Table
@@ -321,21 +337,29 @@ class HashTable:
         return i
     
     
-# Serves as the highest abstract data type (class), which contains the game database (Hash Table)
 class Library:
-    """ Represents the Game library; wrapper for data structures
+    """ Represents the Game library; wrapper for data structures; highest abstract class
     
     Attributes:
         size (int, optional): size of the dataBase. Defaults to 50
-        dataBase (HashTable): Hash Table which contains all stored Games
+        dataBase (HashTable[Game]): Hash Table which contains all stored Games
         MEMDIR (str): Directory of persistent memory file
+        titles (list[str]): contains all titles of entered games; used for lexicographical sorting for printLib()
     """
-    def __init__(self, size=50):
+    def __init__(self, size=50, mem="LibMem.csv"):
         self.size = size
         self.dataBase = HashTable(size)   
-        self.MEMDIR = "LibMem.csv"
+        self.MEMDIR = mem
+        self.titles = []
         
         self.loadMemory()
+        
+    # Makes CSV of current library
+    def exportLibrary():
+        pass
+    
+    def __len__(self):
+        return len(self.dataBase)
     
     def resetLib(self):
         """ Prompts user Y/N if they want to erase all Games permanently from HashTable & specified persistent memory CSV """
@@ -348,6 +372,7 @@ class Library:
                 match selYN:
                     case "N": return
                     case "Y": 
+                        self.titles = []
                         open(self.MEMDIR, 'w').close() 
                         self.dataBase = HashTable(self.size)
                         gPrint("\nLibrary Successfully Reset!\n")
@@ -366,8 +391,8 @@ class Library:
         print(mtxt("This library uses a HashTable to store & reterieve games\n& their data in constant time (Instantly)."), end="")
         mPrint(" Lists, which\nare normally used to store indexable data, take linear\ntime (proportional to number of games stored).\n")
         print(mtxt("In this library, you can search, add games, delete games,\ncombine the existing library with a file containing\nentries,"), end="")
-        mPrint("print the library, reset the library, then save\n& exit whenever you're done.\n")
-        mPrint("Whenever you exit, your games will be saved in memory,\nmeaning they'll still be in the libary for next time.\n")
+        mPrint(" print the library/database, reset the library,\nthen save & exit whenever you're done.\n")
+        mPrint("Whenever you exit, your games will be saved in memory,\nmeaning they'll still be in the library for next time.\n")
         mPrint("User instructions for this software are always on screen.")
         wPrint("#"*57)
         ysinp("\nPress Enter to Return")
@@ -375,34 +400,41 @@ class Library:
     
     
     def search(self):    
-        """ Searches for single game by user inputted title """
+        """ Searches for single game by user inputted title, prints matching game's attributes """
         while(True):
-            title_=sinp("Enter Title, or Type 'back' to Go Back:")
-            if (title_.lower() =="back"): return
-            try: gamev = self.dataBase[title_]
+            clear()
+            title_ = ysinp("\n\n\nEnter Title, or Type 'back' to Go Back:").strip()
+            if (title_.casefold() == "back"): return
+            try: gamev = self.dataBase[formName(title_)]
             except InvalidAccessErr:
-                rPrint("\n[Error]: Game not Found\n")
+                ##clear()
+                rPrint("\n\n[Error]: Game not Found")
                 sleep(3) 
             else:
-                a = repr(gamev).strip(",")
-                print("Title:  ",a[0])
-                print("Rating:  ",a[1])
-                print("Size:  ",a[2])
-                print("Price:  ",a[3])
-                sinp("\n Hit Enter to Continue")
+                ##clear()
+                rep = repr(gamev)
+                a = rep.split(",")
+                spc = " "*6
+                bar = "_"*(len(a[0])+12)
+                print("\n\n\n")
+                wPrint(f"{spc}{a[0]}{spc}")
+                wPrint(f"{bar}\n")
+                cPrint("Rating:".ljust(10) + f"{a[1]}")
+                cPrint("Size:".ljust(10) + f"{a[2]}")
+                cPrint("Price:".ljust(10) + f"{a[3]}")
+                ysinp("\n\nHit Enter to Continue")
         
     def importGames(self):
         """ Imports games from a user-specified CSV into self.dataBase (a HashTable) """
         while T:
-            filename = sinp("Enter filename, or type 'back' to go back: ") 
-            if str.lower(filename) == "back": return
+            clear()
+            filename_ = ysinp("\n\nEnter filename, or type 'back' to go back: ") 
+            if filename_.lower() == "back": return
             else:
-                openfile = open(filename,'r')
-                filedata = openfile.read()
-                lista = filedata.split('\n')
-                listb = [string.split(',') for string in lista]
-                openfile.close()
-                
+                with open(filename_, 'r') as f:
+                    filedata = f.read()
+                    lista = filedata.split('\n')
+                    listb = [string.split(',') for string in lista]
                 d, e, p = 0, 0, 0
                 for row in listb:
                     try:
@@ -410,15 +442,16 @@ class Library:
                         self.dataBase[gameinfo.title] = gameinfo
                     except DuplicateEntry: d+=1
                     except EmptyEntry: e+=1                
-                    else: p+=1
+                    else: 
+                        self.titles.append(gameinfo.title)
+                        p+=1
                       
                 print("    Import Completed    ")
                 print("----------------------")
-                print("Successful Imports: {}".format(p))
-                print("Duplicate Imports:  {}".format(d))
-                print("Empty Imports:      {}".format(e))
-                print()
-                ysinp("Press Enter to Continue")
+                print(f"Successful Imports: {p}")
+                print(f"Duplicate Imports:  {d}")
+                print(f"Empty Imports:      {e}\n\n")
+                ysinp(f"Press Enter to Continue")
                 return
         
     @staticmethod
@@ -427,7 +460,7 @@ class Library:
         Raises:
             InvalidSelection: When user inputs anything other than an int in [1,8]
         Returns:
-            int: user input (menu selection)
+            int: user input in interval [1,9] (menu selection)
         """
         sel = ""
         while not sel:
@@ -438,13 +471,14 @@ class Library:
             cPrint("3) Delete Game")
             cPrint("4) Instructions")
             cPrint("5) Print Library")
-            cPrint("6) Reset Library")
-            cPrint("7) Import Library")
-            cPrint("8) Save & Exit Program")
+            cPrint("6) Print Database")
+            cPrint("7) Delete Library")
+            cPrint("8) Import Library")
+            cPrint("9) Save & Exit Program")
             wPrint("#"*30)
             sel = ysinp("Please Make a Selection: ")
             
-        if sel.isdigit() and 1 <= int(sel) <= 8:
+        if sel.isdigit() and 1 <= int(sel) <= 9:
             return int(sel)
         else:
             raise InvalidSelection(sel)
@@ -479,22 +513,14 @@ class Library:
         
     # Loads in persistent memory stored in self.MEMDIR (LibMem.csv, or any other csv containing Game entries)
     def loadMemory(self):
-        """
-        Read in a CSV or txt file line-by-line (Library's attribute self.MEMDIR contains the filename of the peristsent memory, AKA, the csv/txt file)
-            - For each line, split into a list of 4 strings for each piece of data ([title, rating, size, price]) then pass the 
-                    resulting list into Game.stog(list goes here), which will return a Game instance (See Game class Docstring for more info)
-                + Be sure to strip each line of newline characters & extra spaces (do not remove necessary spaces in the title)
-            - Add Game to self.dataBase (You can use GameVar.title to access the title of the game)
-                + See HashTable's Docstring for how to add Games to self.dataBase (specifically __setitem__)
-                NOTE: You will need to be able to handle 'DuplicateEntry' & 'EmptyEntry' exceptions by using a try-except-else block (see #resources channel)
-                + DO NOT USE 'Exception', IT MUST BE 'DuplicateEntry' exception, or 'EmptyEntry' exception
-            - If EmptyEntry or Duplicate entry is raised, ignore the line
-            - If no exception, add the game to self.dataBase (see __setitem__ in HashTable's docstring)
-        When the end of the file is reached, return
-        """
-        
-        # Your Code Here
-        
+        """ Loads in data saved at the path held by self.MEMDIR """
+        with open(self.MEMDIR, 'r') as gamefile:
+            for line in gamefile:
+                gme = line.strip().split(',') 
+                try: self.dataBase[gme[0]] = Game.stog(gme)           
+                except DuplicateEntry: continue
+                except EmptyEntry: continue
+                else: self.titles.append(gme[0])
         return
     
     def addGame(self):
@@ -511,7 +537,9 @@ class Library:
                 try: self.dataBase[title_] = Game.stog([title_, rating_, size_, price_])
                 except DuplicateEntry: msg = rtxt("\n[ERROR]: Duplicate Game Entry!\n")
                 except EmptyEntry: msg = rtxt("\n[ERROR]: Blank Game Entry!\n")
-                else: msg = gtxt("\nGame Successfully Added to Library!\n")
+                else: 
+                    self.titles.append(title_)
+                    msg = gtxt("\nGame Successfully Added to Library!\n")
                 finally:
                     clear()
                     print(msg)
@@ -525,18 +553,29 @@ class Library:
             else:
                 try: del self.dataBase[title_]
                 except InvalidAccessErr: print("\n[ERROR]: Game not found\n")
-                else: print("\nGame successfully deleted\n" )
+                else: 
+                    self.titles.remove(title_)
+                    print("\nGame successfully deleted\n" )
                 finally: sleep(3)
     
+    
     def printLib(self):
-        """ Prints Library's database (HashTable) to terminal """
+        """ Prints library in a user friendly way """
+        clear()
+        self.titles.sort(key=lambda x: x[0])
+        print("\n\n\n")
+        for entry in self.titles:
+            cPrint(entry)
+        print("\n")
+        ysinp("Press Enter to Return to Main Menu")
+            
+    def printdataBase(self):
+        clear()
+        """ Prints Library's database (HashTable) to terminal as a linked list """
+        mPrint(f"\nGame Entries: {len(self)}\n")
         print(self)
         sinp("Press Enter to go back: ") 
         return
-
-
-
-
 
 
 if __name__ == "__main__": pass

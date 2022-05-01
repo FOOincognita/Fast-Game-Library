@@ -1,6 +1,6 @@
+import os
 import utils
 from decimal import InvalidOperation
-from os import system 
 from time import sleep
 from Library import Library
 from utils import InvalidSelection
@@ -13,18 +13,21 @@ ytxt = lambda x: fgtxt(fg.YELLOW, x)
 ctxt = lambda x: fgtxt(fg.CYAN, x)
 gtxt = lambda x: fgtxt(fg.GREEN, x)
 mtxt = lambda x: fgtxt(fg.MAGENTA, x)
+wtxt = lambda x: fgtxt(fg.WHITE, x)
 
 cPrint = lambda x: print(ctxt(x))
 rPrint = lambda x: print(rtxt(x))
 gPrint = lambda x: print(gtxt(x))
 yPrint = lambda x: print(ytxt(x))
 mPrint = lambda x: print(mtxt(x))
+wPrint = lambda x: print(wtxt(x))
 
 rsinp = lambda x: sinp(rtxt(x))
 ysinp = lambda x: sinp(ytxt(x))
 csinp = lambda x: sinp(ctxt(x))
 gsinp = lambda x: sinp(gtxt(x))
 msinp = lambda x: sinp(mtxt(x))
+wsinp = lambda x: sinp(wtxt(x))
 
 ########## Global Constants ##########
 T = True
@@ -32,7 +35,8 @@ F = False
 ########## Global Functions ##########
 
 # Clears terminal screen on Win, Mac, & Linux
-def clear(): system('cls||clear')
+def clear(): 
+    os.system('cls' if os.name == 'nt' else 'clear')
     
 def safeExit():
     clear()
@@ -69,7 +73,7 @@ def formName(name):
     return form[:-1]
 
 ######### Main ##########
-lib = Library(10)
+lib = Library(25)
 sel = 0
 
 if __name__ == "__main__":
@@ -96,15 +100,15 @@ if __name__ == "__main__":
         else:
             try:
                 match (sel):
-                    case 0: raise InvalidOperation(rtxt("case 0 matched")) # -rm
                     case 1: lib.search()
                     case 2: lib.addGame()
                     case 3: lib.delGame()
                     case 4: Library.instructions()
                     case 5: lib.printLib()
-                    case 6: lib.resetLib()
-                    case 7: lib.importGames()
-                    case 8: lib.saveAndExit()
+                    case 6: lib.printdataBase()
+                    case 7: lib.resetLib()
+                    case 8: lib.importGames()
+                    case 9: lib.saveAndExit()
             except SystemExit: safeExit()
             except Exception as e: unknownExcept(2,e)
             finally: clear()

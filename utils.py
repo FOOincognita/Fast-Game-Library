@@ -14,6 +14,10 @@ class EmptyEntry(Exception): pass
 # Used as a custom exception when anything other than ints 1-8 are entered in main menu
 class InvalidSelection(Exception): pass
 
+####################################################################################################
+# install_packages() IS NOT MY WORK; IT'S FROM STACK OVERFLOW 
+# & WAS ONLY USED TO ENSURE DEPENDANCIES WERE INSTALLED PROPERLY 
+# FOR EACH GROUP MEMBER SO THEY COULD TEST THEIR CODE
 def should_install_requirement(requirement):
     should_install = False
     try:
@@ -40,6 +44,7 @@ def install_packages(requirement_list):
         
 # Add required packages here
 install_packages(['colorama'])
+####################################################################################################
 
 ########## PYTHON VER VALIDATION ##########
 if python_version().split('.')[1] != "10":
