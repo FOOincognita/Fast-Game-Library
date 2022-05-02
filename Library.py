@@ -2,7 +2,7 @@
 import os
 from time import sleep 
 from xml.dom import InvalidAccessErr, InvalidCharacterErr
-from utils import DuplicateEntry, EmptyEntry, InvalidSelection
+from utils import DuplicateEntry, EmptyEntry, ExitNoSave, InvalidSelection, SaveExit
 from colorama import init, Fore as fg, Back as bg, Style as st
 init(autoreset=True)
 
@@ -345,12 +345,15 @@ class Library:
         dataBase (HashTable[Game]): Hash Table which contains all stored Games
         MEMDIR (str): Directory of persistent memory file
         titles (list[str]): contains all titles of entered games; used for lexicographical sorting for printLib()
+        modified (bool): True when a game(s) has been imported, added, deleted; False when dataBase hasn't been modified
     """
     def __init__(self, size=50, mem="LibMem.csv"):
         self.size = size
         self.dataBase = HashTable(size)   
         self.MEMDIR = mem
         self.titles = []
+        
+        self.modified = False
         
         self.loadMemory()
         
@@ -449,6 +452,7 @@ class Library:
                         except DuplicateEntry: d+=1
                         except EmptyEntry: e+=1                
                         else: 
+                            self.modified = T
                             self.titles.append(gameinfo.title)
                             p+=1
                     clear()
@@ -473,19 +477,20 @@ class Library:
         while not sel:
             clear()
             wPrint("#"*10 + " Main Menu " + "#"*10)
-            cPrint("1) Search")
-            cPrint("2) Add Game")
-            cPrint("3) Delete Game")
-            cPrint("4) Instructions")
-            cPrint("5) Print Library")
-            cPrint("6) Print Database")
-            cPrint("7) Delete Library")
-            cPrint("8) Import Library")
-            cPrint("9) Save & Exit Program")
+            cPrint("1)  Search")
+            cPrint("2)  Add Game")
+            cPrint("3)  Delete Game")
+            cPrint("4)  Instructions")
+            cPrint("5)  Print Library")
+            cPrint("6)  Print Database")
+            cPrint("7)  Delete Library")
+            cPrint("8)  Import Library")
+            cPrint("9)  Save & Exit Program")
+            cPrint("10) Exit Without Saving")
             wPrint("#"*30)
             sel = ysinp("Please Make a Selection: ")
             
-        if sel.isdigit() and 1 <= int(sel) <= 9:
+        if sel.isdigit() and 1 <= int(sel) <= 10:
             return int(sel)
         else:
             raise InvalidSelection(sel)
@@ -499,7 +504,29 @@ class Library:
             if len(selYN) == 1 and selYN.isalpha() and selYN in ["Y","N"]:
                 match selYN:
                     case "N": return
-                    case "Y": exit()
+                    case "Y": 
+                        if self.modified:
+                            open(self.MEMDIR, 'w').close() 
+                            with open(self.MEMDIR, 'w') as f:
+                                for ll in self.dataBase.arr:
+                                    if len(ll):
+                                        for node in ll:
+                                            if node.data is not None:
+                                                f.write(f"{repr(node.data)}\n")
+                        raise SaveExit
+            else:
+                clear()
+                rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
+                sleep(4)
+                
+    def exitNoSave(self):
+        while T:
+            clear()
+            selYN = rsinp("Exiting without saving will delete all games added after startup\nAre you sure you want to exit without saving [Y/N]?\n").strip().upper()
+            if len(selYN) == 1 and selYN.isalpha() and selYN in ["Y","N"]:
+                match selYN:
+                    case "N": return
+                    case "Y": raise ExitNoSave
             else:
                 clear()
                 rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
@@ -512,11 +539,6 @@ class Library:
             str: a string representing the underlying HashTable Instnace
         """
         return str(self.dataBase)
-        
-    # Writes newly added game(s) to MEMDIR file upon save & exit call
-    # TODO: IMPLEMENT
-    def writeMemory(self, game_):
-        pass     
         
     # Loads in persistent memory stored in self.MEMDIR (LibMem.csv, or any other csv containing Game entries)
     def loadMemory(self):
@@ -541,10 +563,12 @@ class Library:
                 rating_ = sinp("Enter rating: ") 
                 size_ = sinp("Enter size (GB): ") 
                 price_ = sinp("Enter Price ($): ")
-                try: self.dataBase[title_] = Game.stog([title_, rating_, size_, price_])
+                try: 
+                    self.dataBase[title_] = Game.stog([title_, rating_, size_, price_])
                 except DuplicateEntry: msg = rtxt("\n[ERROR]: Duplicate Game Entry!\n")
                 except EmptyEntry: msg = rtxt("\n[ERROR]: Blank Game Entry!\n")
                 else: 
+                    self.modified = T
                     self.titles.append(title_)
                     msg = gtxt("\nGame Successfully Added to Library!\n")
                 finally:
@@ -561,6 +585,7 @@ class Library:
                 try: del self.dataBase[title_]
                 except InvalidAccessErr: print("\n[ERROR]: Game not found\n")
                 else: 
+                    self.modified = T
                     self.titles.remove(title_)
                     print("\nGame successfully deleted\n" )
                 finally: sleep(3)
@@ -570,7 +595,8 @@ class Library:
         """ Prints library in a user friendly way """
         clear()
         self.titles.sort(key=lambda x: x[0])
-        print("\n\n\n")
+        print("\n")
+        mPrint(f"\nGame Entries: {len(self)}\n")
         for entry in self.titles:
             cPrint(entry)
         print("\n")

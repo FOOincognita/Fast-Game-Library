@@ -3,7 +3,7 @@ import utils
 from decimal import InvalidOperation
 from time import sleep
 from Library import Library
-from utils import InvalidSelection
+from utils import ExitNoSave, InvalidSelection, SaveExit
 from colorama import Fore as fg, Back as bg, Style as st
 
 sinp = lambda x: str(input(str(x)))
@@ -38,14 +38,15 @@ F = False
 def clear(): 
     os.system('cls' if os.name == 'nt' else 'clear')
     
-def safeExit():
+def safeExit(save):
     clear()
-    print(gtxt("Saving"), end="")
-    for i in range(3):
-        print(gtxt("."), end="")
-        sleep(1)
+    if save:
+        print(gtxt("Saving"), end="")
+        for i in range(3):
+            print(gtxt("."), end="")
+            sleep(1)
     gPrint("\nGoodbye!")
-    sleep(1)
+    sleep(2)
     clear()
     exit()
     
@@ -109,7 +110,9 @@ if __name__ == "__main__":
                     case 7: lib.resetLib()
                     case 8: lib.importGames()
                     case 9: lib.saveAndExit()
-            except SystemExit: safeExit()
+                    case 10: lib.exitNoSave()
+            except SaveExit: safeExit(T)
+            except ExitNoSave: safeExit(F)
             except Exception as e: unknownExcept(2,e)
             finally: clear()
             

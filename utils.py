@@ -14,6 +14,12 @@ class EmptyEntry(Exception): pass
 # Used as a custom exception when anything other than ints 1-8 are entered in main menu
 class InvalidSelection(Exception): pass
 
+# Flag used to save & exit
+class SaveExit(Exception): pass
+
+# Flag used to save without exiting
+class ExitNoSave(Exception): pass
+
 ####################################################################################################
 # install_packages() IS NOT MY WORK; IT'S FROM STACK OVERFLOW 
 # & WAS ONLY USED TO ENSURE DEPENDANCIES WERE INSTALLED PROPERLY 
