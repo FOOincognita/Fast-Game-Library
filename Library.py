@@ -57,6 +57,7 @@ def formName(name):
     """
     form = ""
     for n in name.strip().split(" "):
+        if not len(n): return name
         form += n if n.isupper() else (n.lower() if n.casefold() in LOW else n[0].upper() + n[1:].lower())
         form += " "
     return form[:-1]
