@@ -54,10 +54,7 @@ def formName(name):
     form = ""
     LOW = ["of", "the"]
     for n in name.strip().split(" "):
-        form += (n.lower() if n.casefold() in LOW else n[0].upper() + n[1:].lower())
-#        if n.casefold() in ["of", "the"]:
-#            form += n.lower() + " "
-#        else: form += n[0].upper() + n[1:].lower() + " " 
+        form += n if n.isupper() else (n.lower() if n.casefold() in LOW else n[0].upper() + n[1:].lower())
         form += " "
     return form[:-1]
 
