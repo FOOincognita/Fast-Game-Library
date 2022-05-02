@@ -42,6 +42,7 @@ wsinp = lambda x: sinp(wtxt(x))
 ########## Global Constants ##########
 T = True
 F = False
+LOW = ["of", "the"]
 
 ########## Global Functions ##########
 
@@ -49,15 +50,16 @@ F = False
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
 
-# Formats name (First, Middle, & Last) to have capital first letter, lowercase remaining
 def formName(name):
+    """ Formats name (First, Middle, & Last) to have capital first letter, lowercase remaining 
+    Returns:
+        str: Correctly formatted title
+    """
     form = ""
-    LOW = ["of", "the"]
     for n in name.strip().split(" "):
         form += n if n.isupper() else (n.lower() if n.casefold() in LOW else n[0].upper() + n[1:].lower())
         form += " "
     return form[:-1]
-
 
 class Game:
     """ Each instance represents a single Game
@@ -77,7 +79,7 @@ class Game:
     def __str__(self):
         """ Formats Game instnace to str 
         Returns:
-                str: representing a Game's attributes
+            str: representing a Game's attributes
         """
         return f"[{self.title}]"
     
@@ -102,7 +104,6 @@ class Game:
                 Game: instance initialized with data from CSV line
         """
         return cls(*line)
-
 
 class Node:
     """ Represents a single Node in a Linked List
@@ -133,7 +134,6 @@ class Node:
             str: Represents a Node's attributes
         """
         return str(self.data)
-
 
 class LinkedList:
     """ Linked List used in Hash Table to implement chaining method for handling collisions 
