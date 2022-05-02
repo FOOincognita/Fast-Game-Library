@@ -117,6 +117,3 @@ if __name__ == "__main__":
             except Exception as e: unknownExcept(2,e)
             finally: clear()
             
-                
-    
-    
