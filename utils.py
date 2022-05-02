@@ -5,19 +5,19 @@ from platform import python_version
 from pkg_resources import DistributionNotFound, VersionConflict
 from colorama import init, Fore as fg, Back as bg, Style as st
 
-# Used as custom exception when a non-existent item is accessed by dev
+# Raised when a non-existent item is accessed 
 class DuplicateEntry(Exception): pass
 
-# Used as a custom exception when an empty or N/A title is passed (INVALID ENTRY)
+# Raised when an empty or N/A title is imported
 class EmptyEntry(Exception): pass
 
-# Used as a custom exception when anything other than ints 1-8 are entered in main menu
+# Raised when an invalid selection is made user
 class InvalidSelection(Exception): pass
 
-# Flag used to save & exit
+# Flag raised to indicate a save & exit request
 class SaveExit(Exception): pass
 
-# Flag used to save without exiting
+# Flag raised to indicate an exit without save request
 class ExitNoSave(Exception): pass
 
 ####################################################################################################
@@ -56,4 +56,5 @@ install_packages(['colorama'])
 if python_version().split('.')[1] != "10":
     print(st.BRIGHT + fg.RED + "\n[ERROR] PLEASE INSTALL PYTHON 3.10 OR ABOVE" + st.RESET_ALL)
     print(st.BRIGHT + fg.YELLOW + "Your current version: " + str(python_version()) + "\n" + st.RESET_ALL)
+    
     
