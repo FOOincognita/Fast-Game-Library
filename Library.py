@@ -357,11 +357,42 @@ class Library:
         
         self.loadMemory()
         
-    # Makes CSV of current library
-    def exportLibrary():
-        pass
+    def exportLibrary(self):
+        """ Creates a backup of the current library named using user-input """
+        while T:
+            clear()
+            response = ysinp("\n\nType 'back', or enter a filename for your exported library: ")
+            if (response.casefold() == "back"): return
+            else:
+                if response[-4:] != ".csv": response += ".csv"
+                if os.path.exists(response):
+                    clear()
+                    rPrint(f"\n\n[WARNING]: A file named {response} already exists")
+                    selYN = ysinp("\nWould you like to overwrite this file with this export [Y/N]?").strip().upper()
+                    if len(selYN) == 1 and selYN.isalpha() and selYN in ["Y","N"]:
+                        if selYN == "N": continue
+                    else:
+                        clear()
+                        rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
+                        sleep(4)
+                        continue
+                
+                with open(response, 'w') as f:
+                    for ll in self.dataBase.arr:
+                        if len(ll):
+                            for node in ll:
+                                if node.data is not None:
+                                    f.write(f"{repr(node.data)}\n")
+                clear()
+                gPrint("\n\nExport Complete!")
+                ysinp("\nHit Enter to Continue")
+                                
     
     def __len__(self):
+        """ Enables use of len(Library)
+        Returns:
+            int: Number of Games in Library's HashTable (dataBase)
+        """
         return len(self.dataBase)
     
     def resetLib(self):
@@ -448,6 +479,7 @@ class Library:
                     for row in listb:
                         try:
                             gameinfo = Game.stog(row)
+                            gameinfo.title = formName(gameinfo.title)
                             self.dataBase[gameinfo.title] = gameinfo
                         except DuplicateEntry: d+=1
                         except EmptyEntry: e+=1                
@@ -462,6 +494,7 @@ class Library:
                     gPrint("Successful Imports:".ljust(22) + f"{p}")
                     rPrint("Duplicate Imports:".ljust(22) + f"{d}")
                     rPrint("Empty Imports:".ljust(22) + f"{e}\n\n")
+                    print("------------------------")
                     ysinp("Press Enter to Continue")
                     return
         
@@ -477,27 +510,30 @@ class Library:
         while not sel:
             clear()
             wPrint("#"*10 + " Main Menu " + "#"*10)
-            cPrint("1)  Search")
-            cPrint("2)  Add Game")
-            cPrint("3)  Delete Game")
-            cPrint("4)  Instructions")
-            cPrint("5)  Print Library")
-            cPrint("6)  Print Database")
-            cPrint("7)  Delete Library")
-            cPrint("8)  Import Library")
-            cPrint("9)  Save & Exit Program")
-            cPrint("10) Exit Without Saving")
+            cPrint("  1)  Search")
+            cPrint("  2)  Add Game")
+            cPrint("  3)  Delete Game")
+            cPrint("  4)  Instructions")
+            cPrint("  5)  Print Library")
+            cPrint("  6)  Print Database")
+            cPrint("  7)  Delete Library")
+            cPrint("  8)  Import Library")
+            cPrint("  9)  Export Library")
+            cPrint("  10) Save & Exit Program")
+            cPrint("  11) Exit Without Saving")
             wPrint("#"*30)
-            sel = ysinp("Please Make a Selection: ")
+            sel = ysinp("Please Make a Selection: ").strip()
             
-        if sel.isdigit() and 1 <= int(sel) <= 10:
+        if sel.isdigit() and 1 <= int(sel) <= 11:
             return int(sel)
         else:
             raise InvalidSelection(sel)
     
-    # Saves & Exits saftely (writes any unsaved added games)
-    # TODO: IMPLEMENT FULL FUNCTIONALITY
     def saveAndExit(self):
+        """ Saves & Exits saftely (writes any unsaved added games)
+        Raises:
+            SaveExit: to indicate a save & exit safe exit in GameLib.py
+        """
         while T:
             clear()
             selYN = rsinp("\nAre you sure you want to exit [Y/N]?\n").strip().upper()
@@ -520,6 +556,10 @@ class Library:
                 sleep(4)
                 
     def exitNoSave(self):
+        """ Exits program without saving changes
+        Raises:
+            ExitNoSave: Flag to exit program without saving chnages safe exit in GameLib.py
+        """
         while T:
             clear()
             selYN = rsinp("Exiting without saving will delete all games added after startup\nAre you sure you want to exit without saving [Y/N]?\n").strip().upper()
@@ -532,21 +572,21 @@ class Library:
                 rPrint("\n[ERROR]: INVALID SELECTION\nPLEASE SELECT 'Y', OR 'N'")
                 sleep(4)
                 
-    # Dunder str(); Formats Library's HashTable (dataBase) to printable form
     def __str__(self):
-        """ Casts Library Instance to string
+        """ Formats Library's HashTable (dataBase) to printable form
         Returns:
             str: a string representing the underlying HashTable Instnace
         """
         return str(self.dataBase)
         
-    # Loads in persistent memory stored in self.MEMDIR (LibMem.csv, or any other csv containing Game entries)
     def loadMemory(self):
-        """ Loads in data saved at the path held by self.MEMDIR """
-        with open(self.MEMDIR, 'r') as gamefile:
-            for line in gamefile:
+        """ Loads in data saved at the path held by self.MEMDIR upon startup only """
+        with open(self.MEMDIR, 'r') as f:
+            for line in f:
                 gme = line.strip().split(',') 
-                try: self.dataBase[gme[0]] = Game.stog(gme)           
+                try: 
+                    gme[0] = formName(gme[0])
+                    self.dataBase[gme[0]] = Game.stog(gme)           
                 except DuplicateEntry: continue
                 except EmptyEntry: continue
                 else: self.titles.append(gme[0])
@@ -556,15 +596,19 @@ class Library:
         """ Adds game to Library's dataBase attribute (HashTable) using user-inputted data """
         while T:
             clear()
-            title_ = sinp("Enter title, or type 'back' to go back: ") 
+            title_ = formName(ysinp("\n\nEnter title, or type 'back' to go back: ").strip())
             if title_.lower() == "back": return
             else:
                 msg = ""
-                rating_ = sinp("Enter rating: ") 
-                size_ = sinp("Enter size (GB): ") 
-                price_ = sinp("Enter Price ($): ")
-                try: 
-                    self.dataBase[title_] = Game.stog([title_, rating_, size_, price_])
+                rating_ = ysinp("Enter rating: ").strip() 
+                size_ = ysinp("Enter size (GB): ").strip()
+                price_ = ysinp("Enter Price ($): ").strip()
+                
+                if len(rating_) > 3: rating_ = rating_[:3]
+                if size_[-2:].upper() != "GB": size_ += "GB"
+                if price_[0] != '$': price_ = "$" + price_
+                
+                try: self.dataBase[title_] = Game.stog([title_, rating_, size_, price_])
                 except DuplicateEntry: msg = rtxt("\n[ERROR]: Duplicate Game Entry!\n")
                 except EmptyEntry: msg = rtxt("\n[ERROR]: Blank Game Entry!\n")
                 else: 
@@ -579,16 +623,20 @@ class Library:
     def delGame(self):
         """ Deletes a Game instance given a Title """
         while True:
-            title_ = sinp("Enter Title of Game, or 'back' to Return to Main Menu: ")
+            clear()
+            title_ = formName(ysinp("Enter Title of Game, or 'back' to Return to Main Menu: ").strip())
             if title_.lower() == "back": return
             else:
                 try: del self.dataBase[title_]
-                except InvalidAccessErr: print("\n[ERROR]: Game not found\n")
+                except InvalidAccessErr: 
+                    clear()
+                    rPrint("\n\n[ERROR]: Game not found\n")
                 else: 
+                    clear()
                     self.modified = T
                     self.titles.remove(title_)
-                    print("\nGame successfully deleted\n" )
-                finally: sleep(3)
+                    gPrint("\n\nGame successfully deleted!\n" )
+                finally: ysinp("\nHit Enter to Continue")
     
     
     def printLib(self):
@@ -603,15 +651,13 @@ class Library:
         ysinp("Press Enter to Return to Main Menu")
             
     def printdataBase(self):
-        clear()
         """ Prints Library's database (HashTable) to terminal as a linked list """
+        clear()
         mPrint(f"\nGame Entries: {len(self)}\n")
         print(self)
         ysinp("Press Enter to go back: ") 
         return
 
-
 if __name__ == "__main__": pass
-
-# Function Signup Sheet: https://docs.google.com/spreadsheets/d/1FHZYT3ugd7z8yNfNrpPMC92HNbMRgKagbsxZSr7g1Bs/edit?usp=sharing
+    # You can write code under here to test module. Else, run from GameLib.py
 
