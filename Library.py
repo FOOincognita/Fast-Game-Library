@@ -407,11 +407,11 @@ class Library:
             if (title_.casefold() == "back"): return
             try: gamev = self.dataBase[formName(title_)]
             except InvalidAccessErr:
-                ##clear()
+                clear()
                 rPrint("\n\n[Error]: Game not Found")
                 sleep(3) 
             else:
-                ##clear()
+                clear()
                 rep = repr(gamev)
                 a = rep.split(",")
                 spc = " "*6
@@ -429,30 +429,37 @@ class Library:
         while T:
             clear()
             filename_ = ysinp("\n\nEnter filename, or type 'back' to go back: ") 
-            if filename_.lower() == "back": return
+            if filename_.casefold() == "back": return
             else:
-                with open(filename_, 'r') as f:
-                    filedata = f.read()
-                    lista = filedata.split('\n')
-                    listb = [string.split(',') for string in lista]
-                d, e, p = 0, 0, 0
-                for row in listb:
-                    try:
-                        gameinfo = Game.stog(row)
-                        self.dataBase[gameinfo.title] = gameinfo
-                    except DuplicateEntry: d+=1
-                    except EmptyEntry: e+=1                
-                    else: 
-                        self.titles.append(gameinfo.title)
-                        p+=1
-                      
-                print("    Import Completed    ")
-                print("----------------------")
-                print(f"Successful Imports: {p}")
-                print(f"Duplicate Imports:  {d}")
-                print(f"Empty Imports:      {e}\n\n")
-                ysinp(f"Press Enter to Continue")
-                return
+                try:
+                    with open(filename_, 'r') as f:
+                        filedata = f.read()
+                        lista = filedata.split('\n')
+                        listb = [string.split(',') for string in lista]
+                except FileNotFoundError: 
+                    clear()
+                    rPrint(f"\n\n[ERROR]: {filename_} not found")
+                    sleep(5)
+                else:
+                    d, e, p = 0, 0, 0
+                    for row in listb:
+                        try:
+                            gameinfo = Game.stog(row)
+                            self.dataBase[gameinfo.title] = gameinfo
+                        except DuplicateEntry: d+=1
+                        except EmptyEntry: e+=1                
+                        else: 
+                            self.titles.append(gameinfo.title)
+                            p+=1
+                    clear()
+                    print("\n\n\n")
+                    print("    Import Completed    ")
+                    print("------------------------")
+                    gPrint("Successful Imports:".ljust(22) + f"{p}")
+                    rPrint("Duplicate Imports:".ljust(22) + f"{d}")
+                    rPrint("Empty Imports:".ljust(22) + f"{e}\n\n")
+                    ysinp("Press Enter to Continue")
+                    return
         
     @staticmethod
     def promptMainMenu():
@@ -574,7 +581,7 @@ class Library:
         """ Prints Library's database (HashTable) to terminal as a linked list """
         mPrint(f"\nGame Entries: {len(self)}\n")
         print(self)
-        sinp("Press Enter to go back: ") 
+        ysinp("Press Enter to go back: ") 
         return
 
 
