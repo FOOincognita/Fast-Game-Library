@@ -1,4 +1,4 @@
-# ENGR102-FinProj
+# ENGR102 Final Project: The Fast Game Library
 This repository holds all versions of our final project for ENGR-102.
 
 Library.py:
