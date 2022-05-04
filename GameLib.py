@@ -53,7 +53,7 @@ def safeExit(save):
 # Prints invalid selection error to user, returns to main screen
 def invalidSel(n ,e):
     clear()
-    print(rtxt(f"\n[ERROR-0{str(n)}]: {str(e)} IS AN INVALID SELECTION\n") + ytxt("Please make a selection between 1 & 8"))
+    print(rtxt(f"\n[ERROR-0{str(n)}]: {str(e)} IS AN INVALID SELECTION\n") + ytxt("Please make a selection between 1 & 11"))
     sleep(6)
     clear()
      
@@ -74,10 +74,10 @@ def formName(name):
     return form[:-1]
 
 ######### Main ##########
-lib = Library(25)
-sel = 0
 
 if __name__ == "__main__":
+    lib = Library(25)
+    sel = 0
     clear()
     user = csinp("Howdy! What is your name?\n")
     try:
