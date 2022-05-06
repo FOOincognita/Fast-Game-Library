@@ -500,9 +500,9 @@ class Library:
     def promptMainMenu():
         """ Prompts main menu; grabs user input with error checking
         Raises:
-            InvalidSelection: When user inputs anything other than an int in [1,8]
+            InvalidSelection: When user inputs anything other than an int in [1,11]
         Returns:
-            int: user input in interval [1,9] (menu selection)
+            int: user input in interval [1,11] (menu selection)
         """
         sel = ""
         while not sel:
